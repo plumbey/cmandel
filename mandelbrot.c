@@ -22,7 +22,7 @@ void mandelbrot(gdImagePtr image, int *palette, size_t palette_len)
             double complex z = 0.0 + 0.0 * I;
 
             int iterations = 0;
-            while (cabs(z) <= 2 && iterations < ITERATION_LIMIT)
+            while (cabs(z) < 2 && iterations < ITERATION_LIMIT)
             {
                 /*
                  RECURSIVE EQUATION
