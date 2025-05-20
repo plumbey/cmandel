@@ -1,17 +1,26 @@
 #ifndef MANDELBROT_H
 #define MANDELBROT_H
-#include <stdio.h>
+
 #include <gd.h>
-#include <complex.h>
+#include <math.h>
+#include "color.h"
 
-#define WIDTH 2560
-#define HEIGHT 1440
-#define ITERATION_LIMIT 12
+static const int WIDTH = 1000;
+static const int HEIGHT = 1000;
 
-int chooseColorFromIterations(int* palette, size_t length, int num, int numBound);
-void mandelbrot(gdImagePtr image, int *palette, size_t palette_len);
+static const double xCenter = -0.744501;
+static const double yCenter = -0.15141;
+static const double delta = 0.00001;
 
-static const double complex z_lower = -2.00 - 1.2 * I;
-static const double complex z_upper = 0.6 + 1.2 * I;
-static const double complex difference = z_upper - z_lower;
+static const double xLower = xCenter - delta;
+static const double xUpper = xCenter + delta;
+
+static const double yLower = yCenter - delta;
+static const double yUpper = yCenter + delta;
+
+static const double hueIntensity = 0.6;
+static const double max = 1000;
+
+double pointIterate(double x0, double y0, int max);
+void generateMandelbrot(gdImagePtr img);
 #endif

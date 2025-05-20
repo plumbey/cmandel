@@ -1,37 +1,62 @@
 #include "mandelbrot.h"
 
-int chooseColorFromIterations(int* palette, size_t length, int num, int numBound)
+double pointIterate(double x0, double y0, int max)
 {
-    if (num < (float) numBound / length)
-        return palette[0];
-    else if (num > numBound - numBound / length)
-        return palette[length - 1];
-    else
-        return palette[length * num / numBound - 1];
+    double x = 0, y = 0;
+    double iterations = 0;
+
+    while ((x*x + y*y) <= (1 << 16) && iterations < max)
+    {
+        double xtemp = x*x - y*y + x0;
+        y = 2*x*y + y0;
+        x = xtemp;
+        iterations++;
+    }
+
+    return iterations;
 }
 
-void mandelbrot(gdImagePtr image, int *palette, size_t palette_len)
+void generateMandelbrot(gdImagePtr img)
 {
+    double xDifference = xUpper - xLower;
+    double yDifference = yUpper - yLower;
 
-    for (int i = 0; i < HEIGHT; i++)
+    for (int i = 0; i < WIDTH; i++)
     {
-        double complex c_i = z_lower + (cimag(difference) * i / HEIGHT) * I;
-        for (int j = 0; j < WIDTH; j++)
+        double x0 = xLower + xDifference * i / WIDTH;
+        for (int j = 0; j < HEIGHT; j++)
         {
-            double complex c_ij = c_i + (creal(difference) * j / WIDTH);
-            double complex z = 0.0 + 0.0 * I;
-
-            int iterations = 0;
-            while (cabs(z) < 2 && iterations < ITERATION_LIMIT)
-            {
-                /*
-                 RECURSIVE EQUATION
-                */
-                z = z * z + c_ij;
-                iterations++;
-            }
-            gdImageSetPixel(image, j, i, 
-                            chooseColorFromIterations(palette, palette_len, iterations, ITERATION_LIMIT));
+            double y0 = yLower + xDifference * j / HEIGHT;
+            double iteration = pointIterate(x0, y0, max);
+            hsv color = {(int) (powf((iteration / max) * 360, hueIntensity)) % 360, 1, iteration / max};
+            int toAdd = allocHexToImage(img, hsvToRgb(color));
+            gdImageSetPixel(img, i, j, toAdd);
         }
     }
 }
+
+/*
+double pointIterateLerp(double x0, double y0, int max)
+{
+    double log_2 = 0.6931471805599;
+    double x = 0, y = 0;
+    int iterations;
+
+    while ((x*x + y*y) <= (1 << 16) && iterations < max)
+    {
+        double xtemp = x*x - y*y + x0;
+        y = 2*x*y + y0;
+        x = xtemp;
+        iterations++;
+    }
+
+    if (iterations < max)
+    {
+        double log_zn = log(x*x + y*y) / 2;
+        double nu = log(log_zn / log_2) / log_2;
+        iterations = iterations + 1 - nu;
+    }
+
+    return iterations;
+}
+*/

@@ -1,0 +1,52 @@
+#include "mandelbrot.h"
+#include <stdio.h>
+
+int paletteIndexFromIterations(size_t length, int iterations)
+{
+    if (iterations <= ITERATION_LIMIT / length)
+        return 0;
+    else if (iterations >= ITERATION_LIMIT - ITERATION_LIMIT / length)
+        return length - 1;
+    else
+        return length * iterations / ITERATION_LIMIT - 1;
+}
+
+void mandelbrot(gdImagePtr image, int* palette, size_t len)
+{
+    // https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set#
+    double log_2 = 0.6931471805599;
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        double y0 = yLower + yDifference * i / HEIGHT;
+        for (int j = 0; j < WIDTH; j++)
+        {
+            double x0 = xLower + xDifference * j / WIDTH;
+            double x = 0;
+            double y = 0;
+            
+            // trust me bro
+            double iterations = 0;
+
+            // radius = 2^8
+            while ((x*x + y*y) <= (1 << 16) && iterations < ITERATION_LIMIT)
+            {
+                double xtemp = x*x - y*y + x0;
+                y = 2*x*y + y0;
+                x = xtemp;
+                iterations++;
+            }
+
+            if (iterations < ITERATION_LIMIT)
+            {
+                double log_zn = log(x*x + y*y) / 2;
+                double nu = log(log_zn / log_2) / log_2;
+                iterations = iterations + 1 - nu;
+            }
+
+            hsv color = {mod((int)(powf((iterations / ITERATION_LIMIT ) * 360, 1.5)), 360), 1, (iterations / ITERATION_LIMIT)};
+            int rgbColor = hsvToRgb(color);
+            int toSet = allocHexToImage(rgbColor, image);
+            gdImageSetPixel(image, j, i, toSet);
+        }
+    }
+}
