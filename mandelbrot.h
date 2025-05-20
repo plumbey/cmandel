@@ -12,12 +12,6 @@ static const double xCenter = -0.74450100005;
 static const double yCenter = -0.15141000025;
 static const double delta = 0.00000000001;
 
-static const double xLower = xCenter - delta;
-static const double xUpper = xCenter + delta;
-
-static const double yLower = yCenter - delta;
-static const double yUpper = yCenter + delta;
-
 // Feel free to mess with these for proper coloring
 // maximum Iterations, as these increase, the background tends to become darker
 static const double max = 2000;

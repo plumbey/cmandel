@@ -18,8 +18,14 @@ double pointIterate(double x0, double y0, int max)
 
 void generateMandelbrot(gdImagePtr img)
 {
-    double xDifference = xUpper - xLower;
-    double yDifference = yUpper - yLower;
+    const double xLower = xCenter - delta;
+    const double xUpper = xCenter + delta;
+
+    const double yLower = yCenter - delta;
+    const double yUpper = yCenter + delta;
+
+    const double xDifference = xUpper - xLower;
+    const double yDifference = yUpper - yLower;
 
     for (int i = 0; i < WIDTH; i++)
     {
