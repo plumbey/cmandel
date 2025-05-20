@@ -21,8 +21,8 @@ void generateMandelbrot(gdImagePtr img)
     const double xLower = xCenter - delta;
     const double xUpper = xCenter + delta;
 
-    const double yLower = yCenter - delta;
-    const double yUpper = yCenter + delta;
+    const double yLower = -yCenter - delta;
+    const double yUpper = -yCenter + delta;
 
     const double xDifference = xUpper - xLower;
     const double yDifference = yUpper - yLower;
