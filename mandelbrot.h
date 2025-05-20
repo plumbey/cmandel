@@ -17,7 +17,7 @@ static const double delta = 0.00000000001;
 static const double max = 2000;
 // the power by which the hue is raised to, as this increases, the image becomes more rainbow
 static const double hueIntensity = 0.9;
-// the power by which the hue is raised to, as this increases, the image becomes darker
+// the power by which the value is raised to, as this increases, the image becomes darker
 static const double darkness = 0.2;
 
 
