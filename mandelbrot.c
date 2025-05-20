@@ -28,7 +28,7 @@ void generateMandelbrot(gdImagePtr img)
         {
             double y0 = yLower + xDifference * j / HEIGHT;
             double iteration = pointIterate(x0, y0, max);
-            hsv color = {(int) (powf((iteration / max) * 360, hueIntensity)) % 360, 1, iteration / max};
+            hsv color = {(int) (powf((iteration / max) * 360, hueIntensity)) % 360, 1, powf(iteration / max, darkness)};
             int toAdd = allocHexToImage(img, hsvToRgb(color));
             gdImageSetPixel(img, i, j, toAdd);
         }
