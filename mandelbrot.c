@@ -1,6 +1,6 @@
 #include "mandelbrot.h"
 
-double pointIterate(double x0, double y0, int max)
+double pointIterate(double x0, double y0, double max)
 {
     double x = 0, y = 0;
     double iterations = 0;
@@ -16,25 +16,29 @@ double pointIterate(double x0, double y0, int max)
     return iterations;
 }
 
-void generateMandelbrot(gdImagePtr img)
+void generateMandelbrot(gdImagePtr img, MandelbrotData data)
 {
-    const double xLower = xCenter - delta;
-    const double xUpper = xCenter + delta;
+    const double realLower = data.realCenter - data.coordinateDelta;
+    const double realUpper = data.realCenter + data.coordinateDelta;
 
-    const double yLower = -yCenter - delta;
-    const double yUpper = -yCenter + delta;
+    const double imagLower = -data.imagCenter - data.coordinateDelta;
+    const double imagUpper = -data.imagCenter + data.coordinateDelta;
 
-    const double xDifference = xUpper - xLower;
-    const double yDifference = yUpper - yLower;
+    const double realDifference = realUpper - realLower;
+    const double imagDifference = imagUpper - imagLower;
 
-    for (int i = 0; i < WIDTH; i++)
+    for (int i = 0; i < data.pixelWidth; i++)
     {
-        double x0 = xLower + xDifference * i / WIDTH;
-        for (int j = 0; j < HEIGHT; j++)
+        double real0 = realLower + realDifference * i / data.pixelWidth;
+        for (int j = 0; j < data.pixelHeight; j++)
         {
-            double y0 = yLower + xDifference * j / HEIGHT;
-            double iteration = pointIterate(x0, y0, max);
-            hsv color = {(int) (powf((iteration / max) * 360, hueIntensity)) % 360, 1, powf(iteration / max, darkness)};
+            double imag0 = imagLower + realDifference * j / data.pixelHeight;
+            double iteration = pointIterate(real0, imag0, data.maxIterations);
+            hsv color = {
+                (int) (powf((iteration / data.maxIterations) * 360, data.hueIntensity)) % 360,
+                1,
+                powf(iteration / data.maxIterations, data.darkness)
+            };
             int toAdd = allocHexToImage(img, hsvToRgb(color));
             gdImageSetPixel(img, i, j, toAdd);
         }
