@@ -1,8 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <math.h>
-#include <gd.h>
 #include <stdint.h>
 
 typedef struct 

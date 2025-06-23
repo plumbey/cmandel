@@ -1,4 +1,6 @@
 #include "mandelbrot.h"
+#include <math.h>
+#include "color.h"
 
 double pointIterate(double x0, double y0, double max)
 {

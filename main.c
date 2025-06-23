@@ -1,10 +1,8 @@
-#include "renderers/raylib/raylib.h"
 #include <gd.h>
 #define CLAY_IMPLEMENTATION
 #include "mandelbrot.h"
 #include "clay.h"
 #include "renderers/raylib/clay_renderer_raylib.c"
-#include <raylib.h>
 
 void handleClayErrors(Clay_ErrorData errorData)
 {
@@ -42,13 +40,15 @@ int main(void)
     {
         Clay_BeginLayout();
 
-        CLAY({.image = {.imageData = mandelbrotImagePtr->tpixels}})
+        CLAY({.image = {.imageData = mandelbrotImagePtr->tpixels}});
         
         Clay_RenderCommandArray renderCommands = Clay_EndLayout();
 
         BeginDrawing();
-        Clay_Raylib_Render(renderCommands);
+        Clay_Raylib_Render(renderCommands, NULL);
         EndDrawing();
     }
+    gdImageDestroy(mandelbrotImagePtr);
+    Clay_Raylib_Close();
 }
 

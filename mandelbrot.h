@@ -1,10 +1,7 @@
-#ifndef MANDELBROT_H
-#define MANDELBROT_H
+#pragma once
 
 #include <gd.h>
-#include <math.h>
-#include "color.h"
-
+#include <stdint.h>
 typedef struct 
 {
     uint64_t pixelWidth; 
@@ -20,4 +17,3 @@ typedef struct
 
 double pointIterate(double x0, double y0, double max);
 void generateMandelbrot(gdImagePtr img, MandelbrotData data);
-#endif

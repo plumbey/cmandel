@@ -1,3 +1,5 @@
+#include <math.h>
+#include <gd.h>
 #include "color.h"
 
 uint32_t allocHexToImage(gdImagePtr img, uint32_t color)
