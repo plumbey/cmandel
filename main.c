@@ -6,9 +6,9 @@
 #include "renderers/raylib/clay_renderer_raylib.c"
 #include <raylib.h>
 
-void handleClayErrors(Clay_ErrorData error_data)
+void handleClayErrors(Clay_ErrorData errorData)
 {
-    printf("%s", error_data.errorText.chars);
+    printf("%s", errorData.errorText.chars);
 }
 
 int main(void)
@@ -22,12 +22,12 @@ int main(void)
     {
         Clay_BeginLayout();
 
-        CLAY({.image = {.imageData = mandelbrot_image}})
+        CLAY({.image = {.imageData = mandelbrotImage}})
         
-        Clay_RenderCommandArray render_commands = Clay_EndLayout();
+        Clay_RenderCommandArray renderCommands = Clay_EndLayout();
 
         BeginDrawing();
-        Clay_Raylib_Render(render_commands);
+        Clay_Raylib_Render(renderCommands);
         EndDrawing();
     }
 }
