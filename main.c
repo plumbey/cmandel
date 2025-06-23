@@ -18,11 +18,31 @@ int main(void)
     Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(clay_required_memory, malloc(clay_required_memory));
 
     Clay_Initialize(arena, (Clay_Dimensions) {.width = GetScreenWidth(), .height = GetScreenHeight()}, (Clay_ErrorHandler) {handleClayErrors});
+
+    MandelbrotData mandelbrotData =
+    {
+        // This makes the image dimensions square, eliminating distortions
+        .pixelWidth = GetScreenWidth() > GetScreenHeight() ? GetScreenWidth() : GetScreenHeight(),
+        .pixelHeight = GetScreenWidth() > GetScreenHeight() ? GetScreenWidth() : GetScreenHeight(),
+        .realCenter = -0.8,
+        .imagCenter = 0.0,
+        .coordinateDelta = 1.5,
+        .maxIterations = 512,
+        .hueIntensity = 0.8,
+        .darkness = 0.125
+    };
+
+    gdImagePtr mandelbrotImagePtr; 
+    mandelbrotImagePtr = gdImageCreateTrueColor(mandelbrotData.pixelWidth, mandelbrotData.pixelHeight);
+    if (!mandelbrotImagePtr) return 1;
+
+    generateMandelbrot(mandelbrotImagePtr, mandelbrotData);
+
     while (!WindowShouldClose())
     {
         Clay_BeginLayout();
 
-        CLAY({.image = {.imageData = mandelbrotImage}})
+        CLAY({.image = {.imageData = mandelbrotImagePtr->tpixels}})
         
         Clay_RenderCommandArray renderCommands = Clay_EndLayout();
 
