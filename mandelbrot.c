@@ -1,6 +1,6 @@
 #include "mandelbrot.h"
 
-double pointIterate(double x0, double y0, int max)
+inline double pointIterate(double x0, double y0, int max)
 {
     double x = 0, y = 0;
     double iterations = 0;
@@ -16,7 +16,7 @@ double pointIterate(double x0, double y0, int max)
     return iterations;
 }
 
-void generateMandelbrot(gdImagePtr img)
+void generateMandelbrot(gdImagePtr img, int colorIn)
 {
     const double xLower = xCenter - delta;
     const double xUpper = xCenter + delta;
@@ -34,7 +34,22 @@ void generateMandelbrot(gdImagePtr img)
         {
             double y0 = yLower + xDifference * j / HEIGHT;
             double iteration = pointIterate(x0, y0, max);
-            hsv color = {(int) (powf((iteration / max) * 360, hueIntensity)) % 360, 1, powf(iteration / max, darkness)};
+            hsv color;
+
+            if (colorIn && iteration == max)
+            {
+                color.h = 0;
+                color.s = 0;
+                color.v = 0;
+            }
+
+            else
+            {
+                color.h = (int) (powf((iteration / max) * 360, hueIntensity)) % 360;
+                color.s = 1;
+                color.v = powf(iteration / max, darkness);
+            }
+
             int toAdd = allocHexToImage(img, hsvToRgb(color));
             gdImageSetPixel(img, i, j, toAdd);
         }

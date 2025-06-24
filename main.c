@@ -5,7 +5,7 @@ int main(void)
     gdImagePtr img;
     img = gdImageCreateTrueColor(WIDTH, HEIGHT);
 
-    generateMandelbrot(img);
+    generateMandelbrot(img, 1);
     
     FILE* pngout;
     pngout = fopen("output.png", "wb");
