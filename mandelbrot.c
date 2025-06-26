@@ -35,12 +35,20 @@ void generateMandelbrot(gdImagePtr img, MandelbrotData data)
         for (int j = 0; j < data.pixelHeight; j++)
         {
             double imag0 = imagLower + realDifference * j / data.pixelHeight;
-            double iteration = pointIterate(real0, imag0, data.maxIterations);
-            hsv color = {
-                (int) (powf((iteration / data.maxIterations) * 360, data.hueIntensity)) % 360,
-                1,
-                powf(iteration / data.maxIterations, data.darkness)
+            double iterations = pointIterate(real0, imag0, data.maxIterations);
+            hsv color;
+
+            if (data.colorIn && iterations == data.maxIterations)
+            {
+                color.h = 0;
+                color.s = 0;
+                color.v = 0;
+            } else {
+                color.h = (int) (powf((iterations / data.maxIterations) * 360, data.hueIntensity)) % 360;
+                color.s = 1;
+                color.v = powf(iterations / data.maxIterations, data.darkness);
             };
+
             int toAdd = allocHexToImage(img, hsvToRgb(color));
             gdImageSetPixel(img, i, j, toAdd);
         }

@@ -22,7 +22,8 @@ int main(void)
         .coordinateDelta = 1.5,
         .maxIterations = 512,
         .hueIntensity = 0.8,
-        .darkness = 0.125
+        .darkness = 0.125,
+        .colorIn = 1
     };
 
     gdImagePtr mandelbrotImagePtr; 

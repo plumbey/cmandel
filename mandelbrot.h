@@ -12,6 +12,7 @@ typedef struct
     double maxIterations;
     double hueIntensity;
     double darkness; 
+    char colorIn;
 } MandelbrotData;
 
 
