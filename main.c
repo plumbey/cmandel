@@ -15,7 +15,6 @@ int main(void)
 
     MandelbrotData mandelbrotData =
     {
-        // This makes the image dimensions square, eliminating distortions
         .pixelWidth = 2000,
         .pixelHeight = 2000,
         .realCenter = -0.8,
@@ -38,11 +37,14 @@ int main(void)
     uint64_t clay_required_memory = Clay_MinMemorySize();
     Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(clay_required_memory, malloc(clay_required_memory));
 
-    Clay_Initialize(arena, (Clay_Dimensions) {.width = GetScreenWidth(), .height = GetScreenHeight()}, (Clay_ErrorHandler) {handleClayErrors});
-    /*
+    Clay_Initialize(arena, (Clay_Dimensions) 
+            {
+                .width = GetScreenWidth(),
+                .height = GetScreenHeight()
+            }, (Clay_ErrorHandler) {handleClayErrors});
+
     Image inputImage = LoadImage("mandelbrot.png");
     Texture2D textureFromImage = LoadTextureFromImage(inputImage);
-    */
     while (!WindowShouldClose())
     {
         Clay_BeginLayout();
@@ -60,20 +62,53 @@ int main(void)
                 }
             }){};
  */       
-        CLAY({ .id = CLAY_ID("OuterContainer"),
-            .backgroundColor = {255, 255, 255, 255 },
-            .layout = {
-                .layoutDirection = CLAY_TOP_TO_BOTTOM,
-                .sizing = layoutExpand,
-                .padding = CLAY_PADDING_ALL(16),
-                .childGap = 16
-            },
-            .image = {.imageData = &textureFromImage}
-        }){} 
+        CLAY({
+                .id = CLAY_ID("ScreenContainer"),
+                .layout =
+                {
+                    .layoutDirection = CLAY_LEFT_TO_RIGHT,
+                    .sizing = layoutExpand,
+                }
+            })
+        {
+            CLAY(
+                    {.id = CLAY_ID("LeftSideBar"),
+                    .layout = 
+                    {
+                        .sizing = 
+                        {
+                            .width = CLAY_SIZING_PERCENT((1 - (9.0f / 16)) / 2),
+                            .height = CLAY_SIZING_GROW()
+                        }
+                    }
+                })
+            {};
+
+            CLAY(
+                { .id = CLAY_ID("MandelbrotImage"),
+                .layout = {.sizing = {CLAY_SIZING_GROW()}},
+                .image = {.imageData = &textureFromImage},
+                .aspectRatio = 1.0,
+                })
+            {};
+
+            CLAY(
+                    {.id = CLAY_ID("RightSideBar"),
+                    .layout = 
+                    {
+                        .sizing = 
+                        {
+                            .width = CLAY_SIZING_PERCENT((1 - (9.0f / 16)) / 2),
+                            .height = CLAY_SIZING_GROW()
+                        }
+                    }
+                })
+            {};
+        }
         Clay_RenderCommandArray renderCommands = Clay_EndLayout();
 
         BeginDrawing();
-        ClearBackground(RED);
+        ClearBackground(BLACK);
         Clay_Raylib_Render(renderCommands, NULL);
         EndDrawing();
     }
