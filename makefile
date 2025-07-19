@@ -1,16 +1,43 @@
-ifeq ($(shell uname -s), Darwin)
-BREW_PREFIX := /opt/homebrew/bin/brew --prefix
-CFLAGS += -I$(shell $(BREW_PREFIX) libgd)/include
-LDFLAGS += -L$(shell $(BREW_PREFIX) libgd)/lib
-endif
-
 OUT = cmandel
+CFLAGS = -O3
+LDFLAGS = -lgd -lz -lm
 
-all: 
-	gcc $(CFLAGS) $(LDFLAGS) -o $(OUT) main.c mandelbrot.c color.c -fopenmp -lgd -lz -lm -O3
+SRC_DIR := src
+BUILD_DIR := build
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+
+
+ifeq ($(shell uname -s), Darwin)
+BREW_PREFIX := $(shell brew --prefix)
+LIBOMP_PREFIX := $(shell brew --prefix libomp)
+
+CFLAGS += -I$(BREW_PREFIX)/include
+CFLAGS += -I$(LIBOMP_PREFIX)/include
+CFLAGS += -Xpreprocessor -fopenmp
+
+LDFLAGS += -L$(BREW_PREFIX)/lib
+LDFLAGS += -L$(LIBOMP_PREFIX)/lib
+LDFLAGS += -lomp
+else
+
+LDFLAGS += -fopenmp
+endif
+.PHONY: all bld_dir clean run
+
+all : build_dir $(OUT)
+
+$(OUT): $(OBJS)
+	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+build_dir:
+	@mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	gcc $(CFLAGS) -c $< -o $@
 
 run: all
 	./$(OUT)
 
 clean:
-	rm cmandel output.png 2> /dev/null || true
+	rm -rf $(BUILD_DIR) $(OUT)
