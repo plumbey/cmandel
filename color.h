@@ -1,16 +1,14 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <math.h>
 #include <gd.h>
+#include <math.h>
 
-typedef struct 
-{
-    int h;
-    float s;
-    float v;
-}
-hsv;
+typedef struct {
+  int h;
+  float s;
+  float v;
+} hsv;
 
 int allocHexToImage(gdImagePtr img, int color);
 hsv rgbToHsv(int rgbColor);

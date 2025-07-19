@@ -1,18 +1,29 @@
+// main.c
+#include <stdio.h>
+
+#include "argsparse.h"
 #include "mandelbrot.h"
 
-int main(void)
-{
-    gdImagePtr img;
-    img = gdImageCreateTrueColor(WIDTH, HEIGHT);
+int WIDTH = 3000;
+int HEIGHT = 3000;
 
-    generateMandelbrot(img, 1);
-    
-    FILE* pngout;
-    pngout = fopen("output.png", "wb");
+int main(int argc, char *argv[]) {
+  parse_args(argc, argv, &WIDTH, &HEIGHT);
 
-    gdImagePng(img, pngout);
-    
-    fclose(pngout);
-    gdImageDestroy(img);
+  printf("cMandel v0.2\n");
+  printf("Width: %i\nHeight: %i\n", WIDTH, HEIGHT);
+  gdImagePtr img;
+  img = gdImageCreateTrueColor(WIDTH, HEIGHT);
+
+  printf("Generating Mandelbrot\n");
+  generateMandelbrot(img, 1);
+
+  FILE *pngout;
+  pngout = fopen("output.png", "wb");
+
+  gdImagePng(img, pngout);
+
+  printf("Done!\nCleaning up...\n");
+  fclose(pngout);
+  gdImageDestroy(img);
 }
-
