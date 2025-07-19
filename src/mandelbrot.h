@@ -7,7 +7,6 @@
 #include <math.h>
 #include <omp.h>
 
-#include "argsparse.h"
 #include "color.h"
 
 typedef struct {
