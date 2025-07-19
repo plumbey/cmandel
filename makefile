@@ -7,7 +7,7 @@ endif
 OUT = cmandel
 
 all: 
-	gcc $(CFLAGS) $(LDFLAGS) -o $(OUT) main.c mandelbrot.c color.c -lgd -lz -lm -O3
+	gcc $(CFLAGS) $(LDFLAGS) -o $(OUT) main.c mandelbrot.c color.c -fopenmp -lgd -lz -lm -O3
 
 run: all
 	./$(OUT)
