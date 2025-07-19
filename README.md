@@ -1,5 +1,7 @@
 # cMandel
 
+![Example mandelbrot image](/assets/images/example.png)
+
 cMandel is a C program for generating and rendering mandelbrot sets.
 
 ## Dependencies
