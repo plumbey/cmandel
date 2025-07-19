@@ -2,8 +2,8 @@
 
 cMandel is a C program for generating and rendering mandelbrot sets.
 
-## Dependancies
-Install dependancies using your system package manager.
+## Dependencies
+Install dependencies using your system package manager.
 
 [gd](https://github.com/libgd/libgd)
 
