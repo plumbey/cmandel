@@ -55,7 +55,7 @@ print_help()
 	printf("Example: ./cmandel -o \".\"\n\n");
 
 	printf("--help: help menu\n");
-	printf("prints this menu\n");
+	printf("prints this menu\n\n");
 }
 void
 parse_args(int argc, char *argv[], MandelData *data)
@@ -69,6 +69,7 @@ parse_args(int argc, char *argv[], MandelData *data)
 	data->huePower = 1.2;
 	data->darkness = 0.1;
 	data->colorIn = true;
+	data->output = "./output.png";
 
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
@@ -147,6 +148,31 @@ parse_args(int argc, char *argv[], MandelData *data)
 		} else if (strcmp(argv[i], "--help") == 0) {
 			print_help();
 			exit(0);
+		} else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
+			const char *name = argv[++i];
+			int len = strlen(name);
+			int has_slash = strchr(name, '/') != NULL;
+			int has_png =
+			    len >= 4 && strcmp(name + len - 4, ".png") == 0;
+
+			// Add ./ if no slash
+			char temp[1024] = { 0 };
+			if (!has_slash)
+				strcat(temp, "./");
+
+			strcat(temp, name);
+
+			// Add .png if missing
+			if (!has_png)
+				strcat(temp, ".png");
+
+			// Copy to data->outputName
+			data->output = strdup(temp);
+			if (data->output == NULL) {
+				printf(
+				    "Error! Could not allocate memory for output name\n");
+				exit(1);
+			}
 		}
 	}
 }
