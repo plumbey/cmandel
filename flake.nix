@@ -13,11 +13,11 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            gcc
-            gnumake
-            gd
-            zlib
-            bundler
+            pkgs.gcc
+            pkgs.gnumake
+            pkgs.gd
+            pkgs.zlib
+            pkgs.bundler
           ];
         };
       }
