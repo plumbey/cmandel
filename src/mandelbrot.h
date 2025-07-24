@@ -7,7 +7,6 @@
 #include <math.h>
 #include <omp.h>
 
-#include "argsparse.h"
 #include "color.h"
 
 typedef struct {
@@ -28,6 +27,6 @@ typedef struct {
     bool colorIn;
 } MandelData;
 
-double pointIterate(double x0, double y0, int max);
+double pointIteratePeriodic(double x0, double y0, int max, double delta);
 void generateMandelbrot(gdImagePtr img, const MandelData *data);
 #endif
