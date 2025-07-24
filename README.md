@@ -5,12 +5,16 @@
 cMandel is a C program for generating and rendering mandelbrot sets.
 
 ## Dependencies
+
 Install dependencies using your system package manager.
 
 [gd](https://github.com/libgd/libgd)
 
 [zlib](https://zlib.net/)
 
+Or using Nix
+
+`nix develop`
 
 ## Building
 
@@ -27,8 +31,8 @@ make clean
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to
+discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
