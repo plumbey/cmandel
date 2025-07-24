@@ -54,6 +54,11 @@ print_help()
 	printf("Example: ./cmandel -o \"output.png\"\n");
 	printf("Example: ./cmandel -o \".\"\n\n");
 
+	printf("-t: maximum number of threads to use\n");
+	printf(
+	    "specifies as an integer how many threads will be allocated to cMandel. Set to 0 for all threads\n");
+	printf("Example: ./cmandel -t 0\n");
+
 	printf("--help: help menu\n");
 	printf("prints this menu\n\n");
 }
@@ -70,6 +75,7 @@ parse_args(int argc, char *argv[], MandelData *data)
 	data->darkness = 0.1;
 	data->colorIn = true;
 	data->output = "./output.png";
+	data->numThreads = 0;
 
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
@@ -173,6 +179,15 @@ parse_args(int argc, char *argv[], MandelData *data)
 				    "Error! Could not allocate memory for output name\n");
 				exit(1);
 			}
+		} else if (strcmp(argv[i], "-t") == 0 && i + 1 < argc) {
+			int t = atoi(argv[++i]);
+			if ((t == 0) || (t > omp_get_max_threads())) {
+				printf(
+				    "Error! Invalid thread count specified. Max threads: %i\n",
+				    omp_get_max_threads());
+				exit(1);
+			}
+			data->numThreads = t;
 		}
 	}
 }

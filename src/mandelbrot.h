@@ -28,8 +28,10 @@ typedef struct {
 	bool colorIn;
 	// output file path
 	const char *output;
+	// number of threads to use
+	int numThreads;
 } MandelData;
 
 double pointIteratePeriodic(double x0, double y0, int max, double delta);
-void generateMandelbrot(gdImagePtr img, const MandelData *data);
+void generateMandelbrot(gdImagePtr img, const MandelData *data, int numThreads);
 #endif

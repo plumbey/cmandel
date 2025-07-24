@@ -21,13 +21,14 @@ main(int argc, char *argv[])
 	printf("Hue Power: %lf\n", mandelData.huePower);
 	printf("Darkness: %lf\n", mandelData.darkness);
 	printf("Color-In: %s\n", mandelData.colorIn ? "true" : "false");
-	printf("Output location: %s\n\n", mandelData.output);
+	printf("Output location: %s\n", mandelData.output);
+	printf("Threads: %d\n\n", mandelData.numThreads);
 
 	gdImagePtr img;
 	img = gdImageCreateTrueColor(mandelData.width, mandelData.height);
 
 	printf("Generating Mandelbrot\n");
-	generateMandelbrot(img, &mandelData);
+	generateMandelbrot(img, &mandelData, mandelData.numThreads);
 
 	FILE *pngout;
 	pngout = fopen(mandelData.output, "wb");
