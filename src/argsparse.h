@@ -10,4 +10,4 @@
 
 void parse_args(int argc, char *argv[], MandelData *data);
 
-#endif  // !ARGSPARSE_H
+#endif // !ARGSPARSE_H
