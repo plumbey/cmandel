@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
     MandelData mandelData;
 
-    parse_args(argc, argv, &mandelData);
+    int outputFileSpecified = parse_args(argc, argv, &mandelData);
 
     printf("cMandel v0.2\n");
     printf("Width: %d\n", mandelData.width);
@@ -30,7 +30,9 @@ int main(int argc, char *argv[]) {
 
     FILE *pngout;
     pngout = fopen(mandelData.output, "wb");
-    free(mandelData.output);
+
+    if (outputFileSpecified) 
+        free(mandelData.output);
 
     gdImagePng(img, pngout);
 

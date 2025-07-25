@@ -8,6 +8,8 @@
 
 #include "mandelbrot.h"
 
-void parse_args(int argc, char *argv[], MandelData *data);
+int parse_args(int argc, char *argv[], MandelData *data);
+// returns 0 if output file is specified, 1 if it is
+// use this to free the MandelData's .output field.
 
 #endif // !ARGSPARSE_H

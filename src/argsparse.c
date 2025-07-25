@@ -62,7 +62,7 @@ void print_help() {
     printf("--help: help menu\n");
     printf("prints this menu\n\n");
 }
-void parse_args(int argc, char *argv[], MandelData *data) {
+int parse_args(int argc, char *argv[], MandelData *data) {
     data->width = 3000;
     data->height = 3000;
     data->delta = 1.0;
@@ -74,6 +74,8 @@ void parse_args(int argc, char *argv[], MandelData *data) {
     data->colorIn = true;
     data->output = "./output.png";
     data->numThreads = 0;
+
+    int outputFileSpecified = 0;
 
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
@@ -170,6 +172,7 @@ void parse_args(int argc, char *argv[], MandelData *data) {
 
             // Copy to data->outputName
             data->output = strdup(temp);
+            outputFileSpecified = 1;
             if (data->output == NULL) {
                 printf("Error! Could not allocate memory for output name\n");
                 exit(1);
@@ -184,5 +187,7 @@ void parse_args(int argc, char *argv[], MandelData *data) {
             }
             data->numThreads = t;
         }
+
     }
+    return outputFileSpecified;
 }
