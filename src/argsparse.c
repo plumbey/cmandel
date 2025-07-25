@@ -82,14 +82,14 @@ void parse_args(int argc, char *argv[], MandelData *data) {
   for (int i = 0; i < argc; i++) {
     if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
       int w = atoi(argv[++i]);
-      if (w == 0) {
+      if (w == 0 || w > 45000) {
         printf("Error! Invalid width specified\n");
         exit(1);
       }
       data->width = w;
     } else if (strcmp(argv[i], "-h") == 0 && i + 1 < argc) {
       int h = atoi(argv[++i]);
-      if (h == 0) {
+      if (h == 0 || h > 45000) {
         printf("Error! Invalid height specified\n");
         exit(1);
       }
