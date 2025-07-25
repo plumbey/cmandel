@@ -51,13 +51,6 @@ void generateMandelbrot(gdImagePtr img, const MandelData *data,
     const double xStep = xDifference / data->width;
     const double yStep = yDifference / data->height;
 
-    if (numThreads > 0) {
-        omp_set_num_threads(numThreads);
-    } else {
-        omp_set_num_threads(omp_get_max_threads());
-    }
-
-#pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < data->width; i++) {
         //    printf("Thread %d is running number %d\n", omp_get_thread_num(),
         //    i);

@@ -4,7 +4,6 @@
 
 #include <gd.h>
 #include <math.h>
-#include <omp.h>
 #include <stdbool.h>
 
 #include "color.h"
