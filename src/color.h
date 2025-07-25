@@ -1,8 +1,6 @@
-#ifndef COLOR_H
-#define COLOR_H
+#pragma once
 
 #include <gd.h>
-#include <math.h>
 
 typedef struct {
     int h;
@@ -15,5 +13,3 @@ hsv rgbToHsv(int rgbColor);
 int hsvToRgb(hsv hsvColor);
 int lerp(int x, int y, float fraction);
 hsv lerpHsvHue(hsv color1, hsv color2, float fraction);
-
-#endif

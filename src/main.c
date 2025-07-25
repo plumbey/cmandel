@@ -1,32 +1,24 @@
 // main.c
 #include <stdio.h>
 
-#include "argsparse.h"
+#include "text_handle.h"
 #include "mandelbrot.h"
+
+const char *LOG_PATH = "log.txt";
 
 int main(int argc, char *argv[]) {
     MandelData mandelData;
 
-    int outputFileSpecified = parse_args(argc, argv, &mandelData);
+    int outputFileSpecified = parseArgs(argc, argv, &mandelData);
 
     printf("cMandel v0.2\n");
-    printf("Width: %d\n", mandelData.width);
-    printf("Height: %d\n", mandelData.height);
-    printf("Delta: %lf\n", mandelData.delta);
-    printf("X Center: %lf\n", mandelData.xCenter);
-    printf("Y Center: %lf\n", mandelData.yCenter);
-    printf("Max Iterations: %lf\n", mandelData.iterMax);
-    printf("Hue Power: %lf\n", mandelData.huePower);
-    printf("Darkness: %lf\n", mandelData.darkness);
-    printf("Color-In: %s\n", mandelData.colorIn ? "true" : "false");
-    printf("Output location: %s\n", mandelData.output);
-    printf("Threads: %d\n\n", mandelData.numThreads);
+    printMandelDataToStream(&mandelData, stdout);
 
     gdImagePtr img;
     img = gdImageCreateTrueColor(mandelData.width, mandelData.height);
 
     printf("Generating Mandelbrot\n");
-    generateMandelbrot(img, &mandelData, mandelData.numThreads);
+    generateMandelbrot(img, &mandelData);
 
     FILE *pngout;
     pngout = fopen(mandelData.output, "wb");
@@ -38,5 +30,9 @@ int main(int argc, char *argv[]) {
 
     printf("Done!\nCleaning up...\n");
     fclose(pngout);
+
+    if (appendMandelDataToFile(&mandelData, LOG_PATH)) {
+        printf("Added data to log file %s\n", LOG_PATH);
+    }
     gdImageDestroy(img);
 }

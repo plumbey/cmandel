@@ -1,12 +1,8 @@
 // mandelbrot.h
-#ifndef MANDELBROT_H
-#define MANDELBROT_H
+#pragma once
 
 #include <gd.h>
-#include <math.h>
 #include <stdbool.h>
-
-#include "color.h"
 
 typedef struct {
     int width;
@@ -27,10 +23,7 @@ typedef struct {
     bool colorIn;
     // output file path
     char *output;
-    // number of threads to use
-    int numThreads;
 } MandelData;
 
 double pointIteratePeriodic(double x0, double y0, int max, double delta);
-void generateMandelbrot(gdImagePtr img, const MandelData *data, int numThreads);
-#endif
+void generateMandelbrot(gdImagePtr img, const MandelData *data);

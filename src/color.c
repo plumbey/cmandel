@@ -1,4 +1,5 @@
 #include "color.h"
+#include <math.h>
 
 int allocHexToImage(gdImagePtr img, int color) {
     return gdImageColorAllocate(img, (color >> 16) & 0xff, (color >> 8) & 0xff,

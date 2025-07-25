@@ -1,6 +1,11 @@
-#include "argsparse.h"
+#include "text_handle.h"
 
-void print_help() {
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void printHelp() {
     printf("cMandel v0.2\n");
     printf("Commands\n");
     printf("--------\n");
@@ -56,7 +61,8 @@ void print_help() {
     printf("--help: help menu\n");
     printf("prints this menu\n\n");
 }
-int parse_args(int argc, char *argv[], MandelData *data) {
+
+int parseArgs(int argc, char *argv[], MandelData *data) {
     data->width = 3000;
     data->height = 3000;
     data->delta = 1.0;
@@ -67,7 +73,6 @@ int parse_args(int argc, char *argv[], MandelData *data) {
     data->darkness = 0.1;
     data->colorIn = true;
     data->output = "./output.png";
-    data->numThreads = 0;
 
     int outputFileSpecified = 0;
 
@@ -145,7 +150,7 @@ int parse_args(int argc, char *argv[], MandelData *data) {
                 exit(1);
             }
         } else if (strcmp(argv[i], "--help") == 0) {
-            print_help();
+            printHelp();
             exit(0);
         } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
             char *name = argv[++i];
@@ -174,4 +179,33 @@ int parse_args(int argc, char *argv[], MandelData *data) {
         }
     }
     return outputFileSpecified;
+}
+
+int printMandelDataToStream(const MandelData *data, FILE *stream) {
+    if (!stream)
+        return 0;
+
+    fprintf(stream, "Width: %d\n", data->width);
+    fprintf(stream, "Height: %d\n", data->height);
+    fprintf(stream, "Delta: %lf\n", data->delta);
+    fprintf(stream, "X Center: %lf\n", data->xCenter);
+    fprintf(stream, "Y Center: %lf\n", data->yCenter);
+    fprintf(stream, "Max Iterations: %lf\n", data->iterMax);
+    fprintf(stream, "Hue Power: %lf\n", data->huePower);
+    fprintf(stream, "Darkness: %lf\n", data->darkness);
+    fprintf(stream, "Color-In: %s\n", data->colorIn ? "true" : "false");
+    fprintf(stream, "Output location: %s\n\n", data->output);
+
+    return 1;
+}
+
+int appendMandelDataToFile(const MandelData *data, const char *path) {
+    FILE *fp = fopen(path, "a+");
+
+    if (!fp) {
+        fprintf(stderr, "Error: could not open file %s\nOs Error: %s\n", path, strerror(errno));        
+        return 0;
+    }
+    printMandelDataToStream(data, fp);
+    return 1;
 }

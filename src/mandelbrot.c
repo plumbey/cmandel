@@ -1,5 +1,8 @@
 // mandelbrot.c
+#include <math.h>
+
 #include "mandelbrot.h"
+#include "color.h"
 
 inline double pointIteratePeriodic(double x0, double y0, int max,
                                    double delta) {
@@ -35,8 +38,7 @@ inline double pointIteratePeriodic(double x0, double y0, int max,
     return iterations;
 }
 
-void generateMandelbrot(gdImagePtr img, const MandelData *data,
-                        int numThreads) {
+void generateMandelbrot(gdImagePtr img, const MandelData *data) {
     const double xLower = data->xCenter - data->delta;
     const double xUpper = data->xCenter + data->delta;
 

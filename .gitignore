@@ -53,3 +53,5 @@ dkms.conf
 
 # Images
 *.png
+# Log files
+*.txt
