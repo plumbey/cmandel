@@ -1,7 +1,5 @@
 OUT = cmandel
-CFLAGS = -O3
 LDFLAGS = -lgd -lz -lm
-
 SRC_DIR := src
 BUILD_DIR := build
 SRCS := $(wildcard $(SRC_DIR)/*.c)
@@ -25,7 +23,17 @@ LDFLAGS += -fopenmp
 endif
 .PHONY: all bld_dir clean run
 
-all : build_dir $(OUT)
+all: all_compile
+
+all_compile: CFLAGS += -O3
+all_compile: compile
+
+debug: clean debug_compile
+
+debug_compile: CFLAGS += -g
+debug_compile: compile
+
+compile: build_dir $(OUT)
 
 $(OUT): $(OBJS)
 	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
@@ -38,6 +46,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 
 run: all
 	./$(OUT)
+
 
 clean:
 	rm -rf $(BUILD_DIR) $(OUT)
