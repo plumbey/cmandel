@@ -27,7 +27,7 @@ typedef struct {
     // color in the set black
     bool colorIn;
     // output file path
-    const char *output;
+    char *output;
     // number of threads to use
     int numThreads;
 } MandelData;

@@ -152,7 +152,7 @@ void parse_args(int argc, char *argv[], MandelData *data) {
             print_help();
             exit(0);
         } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
-            const char *name = argv[++i];
+            char *name = argv[++i];
             int len = strlen(name);
             int has_slash = strchr(name, '/') != NULL;
             int has_png = len >= 4 && strcmp(name + len - 4, ".png") == 0;

@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
 
     FILE *pngout;
     pngout = fopen(mandelData.output, "wb");
+    free(mandelData.output);
 
     gdImagePng(img, pngout);
 
