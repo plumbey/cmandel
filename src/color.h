@@ -3,9 +3,9 @@
 #include <gd.h>
 
 typedef struct {
-    int h;
-    float s;
-    float v;
+	int h;
+	float s;
+	float v;
 } hsv;
 
 int allocHexToImage(gdImagePtr img, int color);
