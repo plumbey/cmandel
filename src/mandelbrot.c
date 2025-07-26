@@ -1,8 +1,6 @@
 // mandelbrot.c
-#include <math.h>
 
 #include "mandelbrot.h"
-#include "color.h"
 
 inline double
 pointIteratePeriodic(double x0, double y0, int max, double delta)
@@ -61,6 +59,8 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 	int progress = 0;
 	int barwidth = 40;
 
+	clock_t start_time = clock();
+
 	for (int i = 0; i < data->width; i++) {
 		//    printf("Thread %d is running number %d\n",
 		//    omp_get_thread_num(), i);
@@ -90,6 +90,7 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 			gdImageSetPixel(img, i, j, toAdd);
 		}
 		progress++;
+		clock_t end_time = clock();
 		int pos = ((progress * 100) / (data->width)) * barwidth / 100;
 		printf("[");
 		for (int i = 0; i < barwidth; i++) {
@@ -101,7 +102,9 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 				printf(" ");
 			}
 		}
-		printf("] Progress: %d%%\r", (progress * 100) / data->width);
+		printf("] Progress: %d%% (%f)\r",
+		       (progress * 100) / data->width,
+		       ((double)(end_time - start_time)) / CLOCKS_PER_SEC);
 		fflush(stdout);
 	}
 	printf("\n");

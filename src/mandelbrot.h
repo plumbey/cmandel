@@ -3,6 +3,10 @@
 
 #include <gd.h>
 #include <stdbool.h>
+#include <time.h>
+#include <math.h>
+
+#include "color.h"
 
 typedef struct {
 	int width;
