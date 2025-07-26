@@ -1,4 +1,5 @@
 #include "color.h"
+#include "mandelbrot.h"
 #include <math.h>
 
 int
@@ -44,21 +45,17 @@ rgbToHsv(int rgbColor)
 
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 int
-hsvToRgb(hsv hsvColor)
+hsvToPal(hsv hsvColor, Palette *palette)
 {
-	int colors[] = { 0xD52D00, 0xEF7627, 0xFF9A56, 0xFFFFFF,
-			 0xD162A4, 0xB55690, 0xA30262 };
 	int hue = hsvColor.h % 360;
 	if (hue < 0)
 		hue += 360;
-
-	int len = sizeof(colors) / sizeof(colors[0]);
-	float slice_size = 360.0f / len;
+	float slice_size = 360.0f / palette->size;
 	int index = (int)(hue / slice_size);
-	if (index >= len)
-		index = len - 1; // Just in case
+	if (index >= palette->size)
+		index = palette->size - 1; // Just in case
 
-	return colors[index];
+	return palette->data[index];
 }
 
 int
