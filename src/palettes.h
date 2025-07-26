@@ -11,6 +11,12 @@ typedef struct {
 
 extern const int lesbian[];
 extern const int trans[];
+extern const int bisexual[];
+extern const int pansexual[];
+extern const int nonbinary[];
+extern const int aromantic[];
+extern const int asexual[];
+extern const int rainbow[];
 
 extern const Palette palette[];
 extern const int numArrays;
