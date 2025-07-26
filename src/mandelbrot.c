@@ -84,8 +84,9 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 			}
 
 			// int toAdd = allocHexToImage(img, hsvToRgb(color));
-			int toAdd =
-			    allocHexToImage(img, hsvToPal(color, data->colors));
+			int toAdd = allocHexToImage(
+			    img, data->colors ? hsvToPal(color, data->colors)
+					      : hsvToRgb(color));
 			gdImageSetPixel(img, i, j, toAdd);
 		}
 	}

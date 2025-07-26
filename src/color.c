@@ -45,7 +45,49 @@ rgbToHsv(int rgbColor)
 
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 int
-hsvToPal(hsv hsvColor, Palette *palette)
+hsvToRgb(hsv hsvColor)
+{
+	float C = hsvColor.v * hsvColor.s;
+	float X = C * (1 - fabs(fmod(hsvColor.h / 60.0f, 2) - 1));
+	float m = hsvColor.v - C;
+
+	float channelPrimes[3];
+
+	if (hsvColor.h < 60) {
+		channelPrimes[0] = C;
+		channelPrimes[1] = X;
+		channelPrimes[2] = 0;
+	} else if (hsvColor.h < 120) {
+		channelPrimes[0] = X;
+		channelPrimes[1] = C;
+		channelPrimes[2] = 0;
+	} else if (hsvColor.h < 180) {
+		channelPrimes[0] = 0;
+		channelPrimes[1] = C;
+		channelPrimes[2] = X;
+	} else if (hsvColor.h < 240) {
+		channelPrimes[0] = 0;
+		channelPrimes[1] = X;
+		channelPrimes[2] = C;
+	} else if (hsvColor.h < 300) {
+		channelPrimes[0] = X;
+		channelPrimes[1] = 0;
+		channelPrimes[2] = C;
+	} else {
+		channelPrimes[0] = C;
+		channelPrimes[1] = 0;
+		channelPrimes[2] = X;
+	}
+
+	int r = (int)((channelPrimes[0] + m) * 255);
+	int g = (int)((channelPrimes[1] + m) * 255);
+	int b = (int)((channelPrimes[2] + m) * 255);
+
+	return r << 16 | g << 8 | b;
+}
+
+int
+hsvToPal(hsv hsvColor, const Palette *palette)
 {
 	int hue = hsvColor.h % 360;
 	if (hue < 0)
