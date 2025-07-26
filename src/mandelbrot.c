@@ -90,7 +90,7 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 			gdImageSetPixel(img, i, j, toAdd);
 		}
 		progress++;
-		int pos = ((progress * 100) / (data->height)) * barwidth / 100;
+		int pos = ((progress * 100) / (data->width)) * barwidth / 100;
 		printf("[");
 		for (int i = 0; i < barwidth; i++) {
 			if (i < pos) {
@@ -101,7 +101,7 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 				printf(" ");
 			}
 		}
-		printf("] Progress: %d%%\r", (progress * 100) / data->height);
+		printf("] Progress: %d%%\r", (progress * 100) / data->width);
 		fflush(stdout);
 	}
 	printf("\n");
