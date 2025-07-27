@@ -46,7 +46,7 @@ void printHelp() {
     printf("specifies how dark you want the mandelbrot set\n");
     printf("this is evaluated as an exponent so be careful with it (or don't I "
            "guess)\n");
-    printf("Example: ./cmandel -D 0.1\n\n");
+    printf("Example: ./cmandel -D 0\n\n");
 
     printf("-c: color-in specifier\n");
     printf("true or false specifier setting whether the set should be colored "
@@ -58,9 +58,7 @@ void printHelp() {
     printf("this alters the background color of the image\n");
     printf("Example: ./cmandel -O 0\n\n");
 
-    printf("-o: relative output filepath\n");
-    printf("string specify where to write the output to, as a png\n");
-    printf("Example: ./cmandel -o \"output.png\"\n");
+    printf("-o: relative output filepath\n"); printf("string specify where to write the output to, as a png\n"); printf("Example: ./cmandel -o \"output.png\"\n");
     printf("Example: ./cmandel -o \".\"\n\n");
 
     printf("--help: help menu\n");
@@ -75,7 +73,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
     data->yCenter = 0;
     data->iterMax = 1024;
     data->huePower = 1.2;
-    data->darkness = 0.1;
+    data->darkness = 0;
     data->colorIn = true;
     data->hueOffset = 0;
     data->output = "./output.png";
