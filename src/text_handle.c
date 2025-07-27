@@ -195,8 +195,11 @@ parseArgs(int argc, char *argv[], MandelData *data)
 				exit(1);
 			}
 		} else if (strcmp(argv[i], "-a") == 0 && i + 1 < argc) {
-			data->palette = argv[++i];
-			data->colors = getArrayByName(data->palette);
+			char *temp = argv[++i];
+			if (getArrayByName(temp)) {
+				data->palette = temp;
+				data->colors = getArrayByName(data->palette);
+			}
 		}
 	}
 	return outputFileSpecified;
