@@ -21,6 +21,8 @@ typedef struct {
     double darkness;
     // color in the set black
     bool colorIn;
+    // offset to change the background color (from 0 - 360)
+    int hueOffset;
     // output file path
     char *output;
 } MandelData;

@@ -53,6 +53,11 @@ void printHelp() {
            "black\n");
     printf("Example: ./cmandel -c true\n\n");
 
+    printf("-O: hue offset specifier\n");
+    printf("value that ranges from 0 - 360 specifing how much to offset the hue by\n");
+    printf("this alters the background color of the image\n");
+    printf("Example: ./cmandel -O 0\n\n");
+
     printf("-o: relative output filepath\n");
     printf("string specify where to write the output to, as a png\n");
     printf("Example: ./cmandel -o \"output.png\"\n");
@@ -72,6 +77,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
     data->huePower = 1.2;
     data->darkness = 0.1;
     data->colorIn = true;
+    data->hueOffset = 0;
     data->output = "./output.png";
 
     int outputFileSpecified = 0;
@@ -149,9 +155,13 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
                 printf("Error! Invalid color-in setting!\n");
                 exit(1);
             }
-        } else if (strcmp(argv[i], "--help") == 0) {
-            printHelp();
-            exit(0);
+        } else if (strcmp(argv[i], "-O") == 0) {
+            double hueOffset = atoi(argv[++i]);
+            if (hueOffset == 0) {
+                printf("Error! Invalid darkness specified\n");
+                exit(1);
+            }
+            data->hueOffset = hueOffset;
         } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
             char *name = argv[++i];
             int len = strlen(name);
@@ -176,6 +186,10 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
                 printf("Error! Could not allocate memory for output name\n");
                 exit(1);
             }
+
+        } else if (strcmp(argv[i], "--help") == 0) {
+            printHelp();
+            exit(0);
         }
     }
     return outputFileSpecified;
@@ -194,6 +208,7 @@ int printMandelDataToStream(const MandelData *data, FILE *stream) {
     fprintf(stream, "Hue Power: %lf\n", data->huePower);
     fprintf(stream, "Darkness: %lf\n", data->darkness);
     fprintf(stream, "Color-In: %s\n", data->colorIn ? "true" : "false");
+    fprintf(stream, "Hue Offset: %d\n", data->hueOffset);
     fprintf(stream, "Output location: %s\n\n", data->output);
 
     return 1;
