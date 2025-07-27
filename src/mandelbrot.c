@@ -54,8 +54,6 @@ void generateMandelbrot(gdImagePtr img, const MandelData *data) {
     const double yStep = yDifference / data->height;
 
     for (int i = 0; i < data->width; i++) {
-        //    printf("Thread %d is running number %d\n", omp_get_thread_num(),
-        //    i);
         double x0 = xLower + i * xStep;
 
         for (int j = 0; j < data->height; j++) {
