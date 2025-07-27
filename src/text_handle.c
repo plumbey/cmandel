@@ -80,7 +80,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
 
     int outputFileSpecified = 0;
 
-    for (int i = 0; i < argc; i++) {
+    for (int i = 0; i < argc - 1; i++) {
         if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
             int w = atoi(argv[++i]);
             if (w == 0 || w > 45000) {
