@@ -92,7 +92,7 @@ lerp(int x, int y, float fraction)
 }
 
 hsv
-hsvLerpHue(hsv color1, hsv color2, float fraction)
+lerpHsvHue(hsv color1, hsv color2, float fraction)
 {
 	hsv ret = { lerp(color1.h, color2.h, fraction), color1.s, color1.v };
 	return ret;
