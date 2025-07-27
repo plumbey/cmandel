@@ -1,6 +1,7 @@
 // palettes.c
 #include "palettes.h"
 
+const int automatic[] = {};
 const int lesbian[] = { 0xD52D00, 0xEF7627, 0xFF9A56, 0xFFFFFF,
 			0xD162A4, 0xB55690, 0xA30262 };
 const int trans[] = { 0x5BCEFA, 0xF5A9B8, 0xFFFFFF };
@@ -12,7 +13,8 @@ const int asexual[] = { 0x000000, 0xA4A4A4, 0xFFFFFF, 0x810081 };
 const int rainbow[] = { 0xE40303, 0xFF8C00, 0xFFED00,
 			0x008026, 0x004DFF, 0x750787 };
 
-const Palette palette[] = { { "lesbian", lesbian, ARRAY_LEN(lesbian) },
+const Palette palette[] = { { "auto", automatic, ARRAY_LEN(automatic) },
+			    { "lesbian", lesbian, ARRAY_LEN(lesbian) },
 			    { "trans", trans, ARRAY_LEN(trans) },
 			    { "bisexual", bisexual, ARRAY_LEN(bisexual) },
 			    { "pansexual", pansexual, ARRAY_LEN(pansexual) },

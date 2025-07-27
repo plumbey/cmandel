@@ -86,7 +86,7 @@ parseArgs(int argc, char *argv[], MandelData *data)
 	data->darkness = 0.1;
 	data->colorIn = true;
 	data->output = "./output.png";
-	data->palette = "";
+	data->palette = "auto";
 	data->colors = getArrayByName(data->palette);
 
 	int outputFileSpecified = 0;
