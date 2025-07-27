@@ -69,8 +69,8 @@ void generateMandelbrot(gdImagePtr img, const MandelData *data) {
                 color.s = 0;
                 color.v = 0;
             } else {
-                color.h = (int)(powf((iteration / data->iterMax) * 360,
-                                     data->huePower)) %
+                color.h = ((int)(powf((iteration / data->iterMax) * 360,
+                                     data->huePower)) + data->hueOffset) %
                           360;
                 color.s = 1;
                 color.v = powf(iteration / data->iterMax, data->darkness);

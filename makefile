@@ -21,6 +21,7 @@ else
 CFLAGS += -fopenmp 
 LDFLAGS += -fopenmp
 endif
+
 .PHONY: all bld_dir clean run
 
 all: all_compile
