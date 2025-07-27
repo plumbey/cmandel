@@ -80,21 +80,21 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
             int w = atoi(argv[++i]);
             if (w == 0 || w > 45000) {
-                printf("Error! Invalid width specified\n");
+                fprintf(stderr, "Error! Invalid width specified\n");
                 exit(1);
             }
             data->width = w;
         } else if (strcmp(argv[i], "-h") == 0 && i + 1 < argc) {
             int h = atoi(argv[++i]);
             if (h == 0 || h > 45000) {
-                printf("Error! Invalid height specified\n");
+                fprintf(stderr, "Error! Invalid height specified\n");
                 exit(1);
             }
             data->height = h;
         } else if (strcmp(argv[i], "-d") == 0 && i + 1 < argc) {
             double d = atof(argv[++i]);
             if (d == 0) {
-                printf("Error! Invalid delta specified\n");
+                fprintf(stderr, "Error! Invalid delta specified\n");
                 exit(1);
             }
             data->delta = d;
@@ -102,7 +102,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-x") == 0 && i + 1 < argc) {
             double x = atof(argv[++i]);
             if (x == 0) {
-                printf("Error! Invalid x center specified\n");
+                fprintf(stderr, "Error! Invalid x center specified\n");
                 exit(1);
             }
             data->xCenter = x;
@@ -110,7 +110,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-y") == 0 && i + 1 < argc) {
             double y = atof(argv[++i]);
             if (y == 0) {
-                printf("Error! Invalid y center specified\n");
+                fprintf(stderr, "Error! Invalid y center specified\n");
                 exit(1);
             }
             data->yCenter = y;
@@ -118,7 +118,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-m") == 0 && i + 1 < argc) {
             int m = atoi(argv[++i]);
             if (m == 0) {
-                printf("Error! Invalid max iteration specified\n");
+                fprintf(stderr, "Error! Invalid max iteration specified\n");
                 exit(1);
             }
             data->iterMax = m;
@@ -126,7 +126,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {
             double p = atof(argv[++i]);
             if (p == 0) {
-                printf("Error! Invalid hue power specified\n");
+                fprintf(stderr, "Error! Invalid hue power specified\n");
                 exit(1);
             }
             data->huePower = p;
@@ -134,7 +134,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-D") == 0 && i + 1 < argc) {
             double D = atof(argv[++i]);
             if (D == 0) {
-                printf("Error! Invalid darkness specified\n");
+                fprintf(stderr, "Error! Invalid darkness specified\n");
                 exit(1);
             }
             data->darkness = D;
@@ -146,7 +146,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
             else if (strcmp(argv[i], "true") == 0)
                 data->colorIn = true;
             else {
-                printf("Error! Invalid color-in setting!\n");
+                fprintf(stderr, "Error! Invalid color-in setting!\n");
                 exit(1);
             }
         } else if (strcmp(argv[i], "--help") == 0) {
@@ -173,7 +173,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
             data->output = strdup(temp);
             outputFileSpecified = 1;
             if (data->output == NULL) {
-                printf("Error! Could not allocate memory for output name\n");
+                fprintf(stderr, "Error! Could not allocate memory for output name\n");
                 exit(1);
             }
         }
