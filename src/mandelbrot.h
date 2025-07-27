@@ -27,6 +27,8 @@ typedef struct {
 	bool colorIn;
 	// output file path
 	char *output;
+	// display progress bar
+	bool progressBar;
 } MandelData;
 
 double pointIteratePeriodic(double x0, double y0, int max, double delta);

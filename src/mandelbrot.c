@@ -89,23 +89,27 @@ generateMandelbrot(gdImagePtr img, const MandelData *data)
 			int toAdd = allocHexToImage(img, hsvToRgb(color));
 			gdImageSetPixel(img, i, j, toAdd);
 		}
-		progress++;
-		clock_t end_time = clock();
-		int pos = ((progress * 100) / (data->width)) * barwidth / 100;
-		printf("[");
-		for (int i = 0; i < barwidth; i++) {
-			if (i < pos) {
-				printf("=");
-			} else if (i == pos) {
-				printf(">");
-			} else {
-				printf(" ");
+		if (data->progressBar) {
+			progress++;
+			clock_t end_time = clock();
+			int pos =
+			    ((progress * 100) / (data->width)) * barwidth / 100;
+			printf("[");
+			for (int i = 0; i < barwidth; i++) {
+				if (i < pos) {
+					printf("=");
+				} else if (i == pos) {
+					printf(">");
+				} else {
+					printf(" ");
+				}
 			}
+			printf("] Progress: %d%% (%f)\r",
+			       (progress * 100) / data->width,
+			       ((double)(end_time - start_time)) /
+				   CLOCKS_PER_SEC);
+			fflush(stdout);
 		}
-		printf("] Progress: %d%% (%f)\r",
-		       (progress * 100) / data->width,
-		       ((double)(end_time - start_time)) / CLOCKS_PER_SEC);
-		fflush(stdout);
 	}
 	printf("\n");
 }
