@@ -55,3 +55,6 @@ dkms.conf
 *.png
 # Log files
 *.txt
+
+# Removing any extra executables
+cmandel
