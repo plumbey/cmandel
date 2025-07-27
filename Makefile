@@ -15,8 +15,6 @@ CFLAGS += -Xpreprocessor
 LDFLAGS += -L$(BREW_PREFIX)/lib
 endif
 
-.PHONY: all bld_dir clean run
-
 all: all_compile
 
 all_compile: CFLAGS += -O3
