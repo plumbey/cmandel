@@ -1,4 +1,4 @@
-// argsparse.h
+// text_handle.h
 #pragma once
 
 #include "mandelbrot.h"
