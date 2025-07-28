@@ -26,7 +26,7 @@ jobs:
         env:
           LINTER_RULES_PATH: config/lint
           FILTER_REGEX_INCLUDE: ^src/
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           FIX_CLANG_FORMAT: true
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
