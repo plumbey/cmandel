@@ -2,6 +2,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -163,27 +164,32 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
         } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
             char *name = argv[++i];
             int len = strlen(name);
-            int has_slash = strchr(name, '/') != NULL;
-            int has_png = len >= 4 && strcmp(name + len - 4, ".png") == 0;
+            bool has_dotslash = (len >= 2 && strcmp(name + len - 2, "./") == 0);
+            bool has_png = (len >= 4 && strcmp(name + len - 4, ".png") == 0);
 
-            // Add ./ if no slash
-            char temp[1024] = {0};
-            if (!has_slash)
-                strcat(temp, "./");
-
-            strcat(temp, name);
-
-            // Add .png if missing
-            if (!has_png)
-                strcat(temp, ".png");
-
-            // Copy to data->outputName
-            data->output = strdup(temp);
-            outputFileSpecified = 1;
-            if (data->output == NULL) {
+            // create buffer for file name
+            // valgrind would complain if using malloc
+            // use calloc to initalize values
+            char *usable_file_name = calloc(sizeof(char), 
+                    len + (has_dotslash ? 0 : 2) + (has_png ? 0 : 4) + 1);
+            if (!usable_file_name) {
                 fprintf(stderr, "Error! Could not allocate memory for output name\n");
                 exit(1);
             }
+
+            // Add ./ if no slash
+            if (!has_dotslash)
+                strcat(usable_file_name, "./");
+
+            strcat(usable_file_name, name);
+
+            // Add .png if missing
+            if (!has_png)
+                strcat(usable_file_name, ".png");
+
+            // Copy to data->outputName
+            data->output = (usable_file_name);
+            outputFileSpecified = 1;
 
         } else if (strcmp(argv[i], "--help") == 0) {
             printHelp();

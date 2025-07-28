@@ -23,16 +23,17 @@ int main(int argc, char *argv[]) {
     FILE *pngout;
     pngout = fopen(mandelData.output, "wb");
 
-    if (outputFileSpecified) 
-        free(mandelData.output);
-
     gdImagePng(img, pngout);
 
     printf("Done!\nCleaning up...\n");
-    fclose(pngout);
 
     if (appendMandelDataToFile(&mandelData, LOG_PATH)) {
         printf("Added data to log file %s\n", LOG_PATH);
     }
+
+    if (outputFileSpecified) 
+        free(mandelData.output);
+
     gdImageDestroy(img);
+    fclose(pngout);
 }
