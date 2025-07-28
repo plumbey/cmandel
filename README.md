@@ -1,6 +1,6 @@
 # cMandel
 
-![Example mandelbrot image](/assets/images/example.png)
+![Example mandelbrot image](assets/images/example.png)
 
 cMandel is a C program for generating and rendering mandelbrot sets.
 
@@ -16,7 +16,11 @@ Or using Nix
 
 `nix develop`
 
+Or if you have Zig installed check out [Using Zig](#using-zig)
+
 ## Building
+
+### Using Make
 
 ```bash
 # Builds
@@ -27,6 +31,16 @@ make clean
 
 # Runs
 ./cmandel
+```
+
+### Using Zig
+
+```bash
+# Builds external dependencies and cmandel
+zig build
+
+# Runs
+./zig-out/bin/cmandel
 ```
 
 ## Contributing
