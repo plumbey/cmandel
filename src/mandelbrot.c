@@ -1,11 +1,12 @@
 // mandelbrot.c
 #include <math.h>
 
-#include "mandelbrot.h"
 #include "color.h"
+#include "mandelbrot.h"
 
 inline double pointIteratePeriodic(double x0, double y0, int max,
-                                   double delta) {
+    double delta)
+{
     double x = 0, y = 0;
     double xold = 0, yold = 0;
     double iterations = 0, period = 0;
@@ -21,8 +22,7 @@ inline double pointIteratePeriodic(double x0, double y0, int max,
         iterations++;
 
         // break if we're repeating
-        if ((x <= xold + margin && x >= xold - margin) &&
-            (y <= yold + margin && y >= yold - margin)) {
+        if ((x <= xold + margin && x >= xold - margin) && (y <= yold + margin && y >= yold - margin)) {
             iterations = max;
             break;
         }
@@ -38,28 +38,26 @@ inline double pointIteratePeriodic(double x0, double y0, int max,
     return iterations;
 }
 
-void generateMandelbrot(gdImagePtr img, const MandelData *data) {
-    const double xLower = data->xCenter - data->delta;
-    const double xUpper = data->xCenter + data->delta;
+void generateMandelbrot(gdImagePtr img, const MandelData* data)
+{
+    const double x_lower = data->xCenter - data->delta;
+    const double x_upper = data->xCenter + data->delta;
 
-    const double yLower =
-        -(data->yCenter) - data->delta * ((double)data->height / data->width);
-    const double yUpper =
-        -(data->yCenter) + data->delta * ((double)data->height / data->width);
+    const double y_lower = -(data->yCenter) - data->delta * ((double)data->height / data->width);
+    const double y_upper = -(data->yCenter) + data->delta * ((double)data->height / data->width);
 
-    const double xDifference = xUpper - xLower;
-    const double yDifference = yUpper - yLower;
+    const double x_difference = x_upper - x_lower;
+    const double y_difference = y_upper - y_lower;
 
-    const double xStep = xDifference / data->width;
-    const double yStep = yDifference / data->height;
+    const double x_step = x_difference / data->width;
+    const double y_step = y_difference / data->height;
 
     for (int i = 0; i < data->width; i++) {
-        double x0 = xLower + i * xStep;
+        double x0 = x_lower + i * x_step;
 
         for (int j = 0; j < data->height; j++) {
-            double y0 = yLower + j * yStep;
-            double iteration =
-                pointIteratePeriodic(x0, y0, data->iterMax, data->delta);
+            double y0 = y_lower + j * y_step;
+            double iteration = pointIteratePeriodic(x0, y0, data->iterMax, data->delta);
             hsv color;
 
             if (data->colorIn && iteration == data->iterMax) {
@@ -68,14 +66,15 @@ void generateMandelbrot(gdImagePtr img, const MandelData *data) {
                 color.v = 0;
             } else {
                 color.h = ((int)(powf((iteration / data->iterMax) * 360,
-                                     data->huePower)) + data->hueOffset) %
-                          360;
+                               data->huePower))
+                              + data->hueOffset)
+                    % 360;
                 color.s = 1;
                 color.v = powf(iteration / data->iterMax, data->darkness);
             }
 
-            int toAdd = allocHexToImage(img, hsvToRgb(color));
-            gdImageSetPixel(img, i, j, toAdd);
+            int to_add = allocHexToImage(img, hsvToRgb(color));
+            gdImageSetPixel(img, i, j, to_add);
         }
     }
 }

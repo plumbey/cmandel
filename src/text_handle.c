@@ -1,12 +1,13 @@
 #include "text_handle.h"
 
 #include <errno.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void printHelp() {
+void printHelp()
+{
     printf("cMandel v0.2\n");
     printf("Commands\n");
     printf("--------\n");
@@ -59,14 +60,17 @@ void printHelp() {
     printf("this alters the background color of the image\n");
     printf("Example: ./cmandel -O 0\n\n");
 
-    printf("-o: relative output filepath\n"); printf("string specify where to write the output to, as a png\n"); printf("Example: ./cmandel -o \"output.png\"\n");
+    printf("-o: relative output filepath\n");
+    printf("string specify where to write the output to, as a png\n");
+    printf("Example: ./cmandel -o \"output.png\"\n");
     printf("Example: ./cmandel -o \".\"\n\n");
 
     printf("--help: help menu\n");
     printf("prints this menu\n\n");
 }
 
-int parseArgs(int argc, char *argv[], MandelData *data) {
+int parseArgs(int argc, char* argv[], MandelData* data)
+{
     data->width = 3000;
     data->height = 3000;
     data->delta = 1.0;
@@ -79,7 +83,7 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
     data->hueOffset = 0;
     data->output = "./output.png";
 
-    int outputFileSpecified = 0;
+    int output_file_specified = 0;
 
     for (int i = 0; i < argc - 1; i++) {
         if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
@@ -137,12 +141,12 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
             data->huePower = p;
 
         } else if (strcmp(argv[i], "-D") == 0 && i + 1 < argc) {
-            double D = atof(argv[++i]);
-            if (D == 0) {
+            double d = atof(argv[++i]);
+            if (d == 0) {
                 fprintf(stderr, "Error! Invalid darkness specified\n");
                 exit(1);
             }
-            data->darkness = D;
+            data->darkness = d;
 
         } else if (strcmp(argv[i], "-c") == 0 && i + 1 < argc) {
             i++;
@@ -155,14 +159,14 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
                 exit(1);
             }
         } else if (strcmp(argv[i], "-O") == 0) {
-            double hueOffset = atoi(argv[++i]);
-            if (hueOffset == 0) {
+            double hue_offset = atoi(argv[++i]);
+            if (hue_offset == 0) {
                 printf("Error! Invalid darkness specified\n");
                 exit(1);
             }
-            data->hueOffset = hueOffset;
+            data->hueOffset = hue_offset;
         } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
-            char *name = argv[++i];
+            char* name = argv[++i];
             int len = strlen(name);
             bool has_dotslash = (len >= 2 && strcmp(name + len - 2, "./") == 0);
             bool has_png = (len >= 4 && strcmp(name + len - 4, ".png") == 0);
@@ -170,8 +174,8 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
             // create buffer for file name
             // valgrind would complain if using malloc
             // use calloc to initalize values
-            char *usable_file_name = calloc(sizeof(char), 
-                    len + (has_dotslash ? 0 : 2) + (has_png ? 0 : 4) + 1);
+            char* usable_file_name = calloc(sizeof(char),
+                len + (has_dotslash ? 0 : 2) + (has_png ? 0 : 4) + 1);
             if (!usable_file_name) {
                 fprintf(stderr, "Error! Could not allocate memory for output name\n");
                 exit(1);
@@ -189,17 +193,18 @@ int parseArgs(int argc, char *argv[], MandelData *data) {
 
             // Copy to data->outputName
             data->output = (usable_file_name);
-            outputFileSpecified = 1;
+            output_file_specified = 1;
 
         } else if (strcmp(argv[i], "--help") == 0) {
             printHelp();
             exit(0);
         }
     }
-    return outputFileSpecified;
+    return output_file_specified;
 }
 
-int printMandelDataToStream(const MandelData *data, FILE *stream) {
+int printMandelDataToStream(const MandelData* data, FILE* stream)
+{
     if (!stream)
         return 0;
 
@@ -218,11 +223,12 @@ int printMandelDataToStream(const MandelData *data, FILE *stream) {
     return 1;
 }
 
-int appendMandelDataToFile(const MandelData *data, const char *path) {
-    FILE *fp = fopen(path, "a+");
+int appendMandelDataToFile(const MandelData* data, const char* path)
+{
+    FILE* fp = fopen(path, "a+");
 
     if (!fp) {
-        fprintf(stderr, "Error: could not open file %s\nOs Error: %s\n", path, strerror(errno));        
+        fprintf(stderr, "Error: could not open file %s\nOs Error: %s\n", path, strerror(errno));
         return 0;
     }
     printMandelDataToStream(data, fp);

@@ -1,38 +1,39 @@
 // main.c
 #include <stdio.h>
 
-#include "text_handle.h"
 #include "mandelbrot.h"
+#include "text_handle.h"
 
-const char *LOG_PATH = "log.txt";
+const char* log_path = "log.txt";
 
-int main(int argc, char *argv[]) {
-    MandelData mandelData;
+int main(int argc, char* argv[])
+{
+    MandelData mandel_data;
 
-    int outputFileSpecified = parseArgs(argc, argv, &mandelData);
+    int output_file_specified = parseArgs(argc, argv, &mandel_data);
 
     printf("cMandel v0.2\n");
-    printMandelDataToStream(&mandelData, stdout);
+    printMandelDataToStream(&mandel_data, stdout);
 
     gdImagePtr img;
-    img = gdImageCreateTrueColor(mandelData.width, mandelData.height);
+    img = gdImageCreateTrueColor(mandel_data.width, mandel_data.height);
 
     printf("Generating Mandelbrot\n");
-    generateMandelbrot(img, &mandelData);
+    generateMandelbrot(img, &mandel_data);
 
-    FILE *pngout;
-    pngout = fopen(mandelData.output, "wb");
+    FILE* pngout;
+    pngout = fopen(mandel_data.output, "wb");
 
     gdImagePng(img, pngout);
 
     printf("Done!\nCleaning up...\n");
 
-    if (appendMandelDataToFile(&mandelData, LOG_PATH)) {
-        printf("Added data to log file %s\n", LOG_PATH);
+    if (appendMandelDataToFile(&mandel_data, log_path)) {
+        printf("Added data to log file %s\n", log_path);
     }
 
-    if (outputFileSpecified) 
-        free(mandelData.output);
+    if (output_file_specified)
+        free(mandel_data.output);
 
     gdImageDestroy(img);
     fclose(pngout);

@@ -24,8 +24,8 @@ typedef struct {
     // offset to change the background color (from 0 - 360)
     int hueOffset;
     // output file path
-    char *output;
+    char* output;
 } MandelData;
 
 double pointIteratePeriodic(double x0, double y0, int max, double delta);
-void generateMandelbrot(gdImagePtr img, const MandelData *data);
+void generateMandelbrot(gdImagePtr img, const MandelData* data);
