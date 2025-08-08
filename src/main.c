@@ -18,11 +18,18 @@ int main(int argc, char* argv[])
     gdImagePtr img;
     img = gdImageCreateTrueColor(mandel_data.width, mandel_data.height);
 
-    printf("Generating Mandelbrot\n");
-    generateMandelbrot(img, &mandel_data);
-
     FILE* pngout;
     pngout = fopen(mandel_data.output, "wb");
+
+    if (!pngout) {
+        fprintf(stderr, "Error! Could not open file %s\n", mandel_data.output);
+        if (output_file_specified)
+            free(mandel_data.output);
+        exit(1);
+    }
+
+    printf("Generating Mandelbrot\n");
+    generateMandelbrot(img, &mandel_data);
 
     gdImagePng(img, pngout);
 
