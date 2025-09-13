@@ -1,7 +1,8 @@
 // mandelbrot.c
+
 #include <math.h>
 
-#include "color.h"
+#include "image.h"
 #include "mandelbrot.h"
 
 inline double pointIteratePeriodic(double x0, double y0, int max,
@@ -38,11 +39,12 @@ inline double pointIteratePeriodic(double x0, double y0, int max,
     return iterations;
 }
 
-void generateMandelbrot(gdImagePtr img, const MandelData* data)
+void generateMandelbrot(png_bytepp img, const MandelData* data)
 {
     const double x_lower = data->xCenter - data->delta;
     const double x_upper = data->xCenter + data->delta;
 
+    // crop the y values if the image height is not square
     const double y_lower = -(data->yCenter) - data->delta * ((double)data->height / data->width);
     const double y_upper = -(data->yCenter) + data->delta * ((double)data->height / data->width);
 
@@ -52,11 +54,12 @@ void generateMandelbrot(gdImagePtr img, const MandelData* data)
     const double x_step = x_difference / data->width;
     const double y_step = y_difference / data->height;
 
-    for (int i = 0; i < data->width; i++) {
-        double x0 = x_lower + i * x_step;
+    for (int i = 0; i < data->height; i++) {
+        double y0 = y_lower + i * y_step;
+        int channel_in_row = 0;
 
-        for (int j = 0; j < data->height; j++) {
-            double y0 = y_lower + j * y_step;
+        for (int j = 0; j < data->width; j++, channel_in_row += 3) {
+            double x0 = x_lower + j * x_step;
             double iteration = pointIteratePeriodic(x0, y0, data->iterMax, data->delta);
             hsv color;
 
@@ -65,6 +68,7 @@ void generateMandelbrot(gdImagePtr img, const MandelData* data)
                 color.s = 0;
                 color.v = 0;
             } else {
+                // https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set#HSV_coloring
                 color.h = ((int)(powf((iteration / data->iterMax) * 360,
                                data->huePower))
                               + data->hueOffset)
@@ -72,9 +76,10 @@ void generateMandelbrot(gdImagePtr img, const MandelData* data)
                 color.s = 1;
                 color.v = powf(iteration / data->iterMax, data->darkness);
             }
-
-            int to_add = allocHexToImage(img, hsvToRgb(color));
-            gdImageSetPixel(img, i, j, to_add);
+            pixel p = hsvToRgb(color);
+            img[i][channel_in_row] = p.r;
+            img[i][channel_in_row + 1] = p.g;
+            img[i][channel_in_row + 2] = p.b;
         }
     }
 }

@@ -1,5 +1,5 @@
 OUT = cmandel
-LDFLAGS = -lgd -lz -lm
+LDFLAGS = -lpng
 SRC_DIR := src
 BUILD_DIR := build
 SRCS := $(wildcard $(SRC_DIR)/*.c)
@@ -10,7 +10,7 @@ ifeq ($(shell uname -s), Darwin)
 BREW_PREFIX := $(shell brew --prefix)
 
 CFLAGS += -I$(BREW_PREFIX)/include
-CFLAGS += -Xpreprocessor
+CFLAGS += -Xpreprocessor -Wno-error=unused-command-line-argument
 
 LDFLAGS += -L$(BREW_PREFIX)/lib
 endif
@@ -22,7 +22,7 @@ all_compile: compile
 
 debug: clean debug_compile
 
-debug_compile: CFLAGS += -g
+debug_compile: CFLAGS += -g -O0
 debug_compile: compile
 
 compile: build_dir $(OUT)

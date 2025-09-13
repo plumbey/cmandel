@@ -1,10 +1,31 @@
-#include "color.h"
+#include "image.h"
 #include <math.h>
 
-int allocHexToImage(gdImagePtr img, int color)
+png_bytepp createBlankImage(png_structp png_ptr, int width, int height)
 {
-    return gdImageColorAllocate(img, (color >> 16) & 0xff, (color >> 8) & 0xff,
-        color & 0xff);
+    png_bytepp img = malloc(sizeof(png_bytep) * height);
+    if (!img)
+        return NULL;
+    for (int i = 0; i < height; i++) {
+        // each r, g, and b channel is one byte
+        img[i] = malloc(sizeof(uint8_t) * width * 3);
+        if (!img[i])
+            return NULL;
+    }
+    return img;
+}
+
+void freeImage(png_structp png_ptr, png_bytepp img, int height)
+{
+    for (int i = 0; i < height; i++) {
+        free(img[i]);
+    }
+    free(img);
+}
+
+int writePngToFile(png_structp png_ptr, png_infop info_ptr, FILE* fp, png_bytepp img, int width, int height)
+{
+    return 0;
 }
 
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
@@ -41,7 +62,7 @@ hsv rgbToHsv(int rgbColor)
 }
 
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
-int hsvToRgb(hsv hsvColor)
+pixel hsvToRgb(hsv hsvColor)
 {
     float c = hsvColor.v * hsvColor.s;
     float x = c * (1 - fabs(fmod(hsvColor.h / 60.0f, 2) - 1));
@@ -75,11 +96,13 @@ int hsvToRgb(hsv hsvColor)
         channel_primes[2] = x;
     }
 
-    int r = (int)((channel_primes[0] + m) * 255);
-    int g = (int)((channel_primes[1] + m) * 255);
-    int b = (int)((channel_primes[2] + m) * 255);
+    pixel ret = {
+        .r = (channel_primes[0] + m) * 255,
+        .g = (channel_primes[1] + m) * 255,
+        .b = (channel_primes[2] + m) * 255
+    };
 
-    return r << 16 | g << 8 | b;
+    return ret;
 }
 
 int lerp(int x, int y, float fraction) { return (x - y) * fraction + x; }

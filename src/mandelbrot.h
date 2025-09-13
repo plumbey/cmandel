@@ -1,8 +1,7 @@
 // mandelbrot.h
 #pragma once
-
-#include <gd.h>
 #include <stdbool.h>
+#include <png.h>
 
 typedef struct {
     int width;
@@ -28,4 +27,4 @@ typedef struct {
 } MandelData;
 
 double pointIteratePeriodic(double x0, double y0, int max, double delta);
-void generateMandelbrot(gdImagePtr img, const MandelData* data);
+void generateMandelbrot(png_bytepp img, const MandelData* data);
