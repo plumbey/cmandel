@@ -1,31 +1,44 @@
 #include "image.h"
 #include <math.h>
 
-png_bytepp createBlankImage(png_structp png_ptr, int width, int height)
+int initializeImage(image *img, int width, int height)
 {
-    png_bytepp img = malloc(sizeof(png_bytep) * height);
-    if (!img)
-        return NULL;
+    img->width = width;
+    img->height = height;
+
+    img->pixels = malloc(sizeof(png_bytep) * height);
+    if (!img->pixels)
+        return -1;
     for (int i = 0; i < height; i++) {
         // each r, g, and b channel is one byte
-        img[i] = malloc(sizeof(uint8_t) * width * 3);
-        if (!img[i])
-            return NULL;
+        img->pixels[i] = malloc(sizeof(uint8_t) * width * 3);
+        if (!img->pixels[i])
+            return -1;
     }
-    return img;
-}
 
-void freeImage(png_structp png_ptr, png_bytepp img, int height)
-{
-    for (int i = 0; i < height; i++) {
-        free(img[i]);
-    }
-    free(img);
-}
-
-int writePngToFile(png_structp png_ptr, png_infop info_ptr, FILE* fp, png_bytepp img, int width, int height)
-{
     return 0;
+}
+
+void freeImage(image img)
+{
+    for (int i = 0; i < img.height; i++) {
+        free(img.pixels[i]);
+    }
+    free(img.pixels);
+}
+
+void writePngToFile(png_structp png_ptr, png_infop info_ptr, FILE* fp, png_bytepp img, int width, int height)
+{
+    png_init_io(png_ptr, fp);
+    png_write_info(png_ptr, info_ptr);
+    png_write_image(png_ptr, img);
+    png_write_end(png_ptr, info_ptr);
+}
+
+void destroyPng(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr, image img)
+{
+    freeImage(img);
+    png_destroy_write_struct(png_ptr_ptr, info_ptr_ptr);
 }
 
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html

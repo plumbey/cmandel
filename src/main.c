@@ -27,21 +27,17 @@ int main(int argc, char* argv[])
 
     png_set_IHDR(png_ptr, info_ptr, mandel_data.width, mandel_data.height, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
-    png_bytepp img = createBlankImage(png_ptr, mandel_data.width, mandel_data.height);
-    generateMandelbrot(img, &mandel_data);
+    image img;
+    initializeImage(&img, mandel_data.width, mandel_data.height);
+    generateMandelbrot(img.pixels, &mandel_data);
 
     FILE* pngout;
     pngout = fopen(mandel_data.output, "wb");
 
-    png_init_io(png_ptr, pngout);
-    png_write_info(png_ptr, info_ptr);
-    png_write_image(png_ptr, img);
-    png_write_end(png_ptr, info_ptr);
-
     printf("Done!\nCleaning up...\n");
 
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    freeImage(png_ptr, img, mandel_data.height);
+    freeImage(img);
 
     if (appendMandelDataToFile(&mandel_data, log_path)) {
         printf("Added data to log file %s\n", log_path);

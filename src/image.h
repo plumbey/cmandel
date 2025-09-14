@@ -4,6 +4,14 @@
 #include <stdlib.h>
 #include <png.h>
 
+
+typedef struct
+{
+    png_bytepp pixels;
+    int width;
+    int height;
+} image;
+
 typedef struct
 {
     uint8_t r;
@@ -17,8 +25,9 @@ typedef struct {
     float v;
 } hsv;
 
+int initializeImage(image *img, int width, int height);
 int writePng(FILE* fp, png_bytepp img, int width, int height);
-void freeImage(png_structp png_ptr, png_bytepp img, int height);
+void freeImage(image img);
 png_bytepp createBlankImage(png_structp png_ptr, int width, int height);
 hsv rgbToHsv(int rgbColor);
 pixel hsvToRgb(hsv hsvColor);
