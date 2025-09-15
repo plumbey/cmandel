@@ -5,10 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <omp.h>
 
 void printHelp()
 {
-    printf("cMandel v0.2\n");
+    printf("cMandel v0.3\n");
     printf("Commands\n");
     printf("--------\n");
     printf("INFO: all examples are the default values\n");
@@ -64,6 +65,12 @@ void printHelp()
     printf("string specify where to write the output to, as a png\n");
     printf("Example: ./cmandel -o \"output.png\"\n");
     printf("Example: ./cmandel -o \".\"\n\n");
+
+    printf("-t: maximum number of threads to use\n");
+    printf("specifies as an integer how many threads will be allocated to "
+           "cMandel. "
+           "Set to 0 for all threads\n");
+    printf("Example: ./cmandel -t 0\n");
 
     printf("--help: help menu\n");
     printf("prints this menu\n\n");
@@ -186,6 +193,15 @@ int parseArgs(int argc, char* argv[], MandelData* data)
             // Copy to data->outputName
             data->output = (usable_file_name);
             output_file_specified = 1;
+        } else if (strcmp(argv[i], "-t") == 0 && i + 1 < argc) {
+            int t = atoi(argv[++i]);
+            if ((t == 0) || (t > omp_get_max_threads())) {
+                printf(
+                    "Error! Invalid thread count specified. Max threads: %i\n",
+                    omp_get_max_threads());
+                exit(1);
+            }
+            data->numThreads = t;
         }
     }
     return output_file_specified;

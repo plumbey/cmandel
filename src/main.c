@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
     int output_file_specified = parseArgs(argc, argv, &mandel_data);
 
-    printf("cMandel v0.2\n");
+    printf("cMandel v0.3\n");
     printMandelDataToStream(&mandel_data, stdout);
 
     FILE* output_file;

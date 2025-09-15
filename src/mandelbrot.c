@@ -19,7 +19,12 @@ void generateMandelbrotImage(image *img, const MandelData* data)
     const double x_step = x_difference / data->width;
     const double y_step = y_difference / data->height;
 
-#pragma omp parallel for
+     if (data->numThreads > 0) {
+        omp_set_num_threads(data->numThreads);
+    } else {
+        omp_set_num_threads(omp_get_max_threads());
+    }
+#pragma omp parallel for schedule(dynamic)
     for (int i = 0; i < data->height; i++) {
         double y0 = y_lower + i * y_step;
 
@@ -113,6 +118,7 @@ MandelData createDefaultMandelData()
     data.colorIn = true;
     data.hueOffset = 0;
     data.output = "./output.png";
+    data.numThreads = 0;
 
     return data;
 }

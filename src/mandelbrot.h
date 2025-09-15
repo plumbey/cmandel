@@ -23,6 +23,7 @@ typedef struct {
     int hueOffset;
     // output file path
     char* output;
+    int numThreads;
 } MandelData;
 
 void generateMandelbrotImage(image* img, const MandelData* data);
