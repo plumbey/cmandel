@@ -1,10 +1,47 @@
-#include "color.h"
+#include "image.h"
 #include <math.h>
 
-int allocHexToImage(gdImagePtr img, int color)
+int initializeImage(image *img, int width, int height)
 {
-    return gdImageColorAllocate(img, (color >> 16) & 0xff, (color >> 8) & 0xff,
-        color & 0xff);
+    img->width = width;
+    img->height = height;
+
+    img->pixels = malloc(sizeof(png_bytep) * height);
+    if (!img->pixels)
+        return -1;
+    for (int i = 0; i < height; i++) {
+        // each r, g, and b channel is one byte
+        img->pixels[i] = malloc(sizeof(uint8_t) * width * 3);
+        if (!img->pixels[i])
+            return -1;
+    }
+
+    img->png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!img->png_ptr) 
+        return -1;
+    img->info_ptr = png_create_info_struct(img->png_ptr);
+    if (!img->info_ptr) 
+        return -1;
+
+    return 0;
+}
+
+void freeImage(image *img)
+{
+    for (int i = 0; i < img->height; i++) {
+        free(img->pixels[i]);
+    }
+    free(img->pixels);
+    png_destroy_write_struct(&img->png_ptr, &img->info_ptr);
+}
+
+void writeImageToFile(image *img, FILE* fp)
+{
+    png_set_IHDR(img->png_ptr, img->info_ptr, img->width, img->height, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_init_io(img->png_ptr, fp);
+    png_write_info(img->png_ptr, img->info_ptr);
+    png_write_image(img->png_ptr, img->pixels);
+    png_write_end(img->png_ptr, img->info_ptr);
 }
 
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
@@ -41,7 +78,7 @@ hsv rgbToHsv(int rgbColor)
 }
 
 // https://www.rapidtables.com/convert/color/hsv-to-rgb.html
-int hsvToRgb(hsv hsvColor)
+pixel hsvToRgb(hsv hsvColor)
 {
     float c = hsvColor.v * hsvColor.s;
     float x = c * (1 - fabs(fmod(hsvColor.h / 60.0f, 2) - 1));
@@ -75,11 +112,13 @@ int hsvToRgb(hsv hsvColor)
         channel_primes[2] = x;
     }
 
-    int r = (int)((channel_primes[0] + m) * 255);
-    int g = (int)((channel_primes[1] + m) * 255);
-    int b = (int)((channel_primes[2] + m) * 255);
+    pixel ret = {
+        .r = (channel_primes[0] + m) * 255,
+        .g = (channel_primes[1] + m) * 255,
+        .b = (channel_primes[2] + m) * 255
+    };
 
-    return r << 16 | g << 8 | b;
+    return ret;
 }
 
 int lerp(int x, int y, float fraction) { return (x - y) * fraction + x; }
