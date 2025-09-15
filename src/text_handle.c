@@ -73,7 +73,11 @@ int parseArgs(int argc, char* argv[], MandelData* data)
 {
     int output_file_specified = 0;
 
-    for (int i = 0; i < argc - 1; i++) {
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "--help") == 0) {
+            printHelp();
+            exit(0);
+            }
         if (strcmp(argv[i], "-w") == 0 && i + 1 < argc) {
             int w = atoi(argv[++i]);
             if (w == 0 || w > 45000) {
@@ -182,10 +186,6 @@ int parseArgs(int argc, char* argv[], MandelData* data)
             // Copy to data->outputName
             data->output = (usable_file_name);
             output_file_specified = 1;
-
-        } else if (strcmp(argv[i], "--help") == 0) {
-            printHelp();
-            exit(0);
         }
     }
     return output_file_specified;

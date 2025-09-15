@@ -100,8 +100,8 @@ MandelData createDefaultMandelData()
 {
     MandelData data;
 
-    data.width = 500;
-    data.height = 500;
+    data.width = 2000;
+    data.height = 2000;
     data.delta = 1.0;
     data.xCenter = -0.5;
     data.yCenter = 0;
