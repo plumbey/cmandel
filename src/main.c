@@ -9,42 +9,42 @@ const char* log_path = "log.txt";
 
 int main(int argc, char* argv[])
 {
-    MandelData mandel_data;
+    MandelData mandel_data = createDefaultMandelData();
 
     int output_file_specified = parseArgs(argc, argv, &mandel_data);
 
     printf("cMandel v0.2\n");
     printMandelDataToStream(&mandel_data, stdout);
 
-    printf("Generating Mandelbrot\n");
-
-    png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png_ptr) 
-        return -1;
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr) 
-        return -1;
-
-    png_set_IHDR(png_ptr, info_ptr, mandel_data.width, mandel_data.height, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    printf("Creating image\n");
 
     image img;
-    initializeImage(&img, mandel_data.width, mandel_data.height);
-    generateMandelbrot(img.pixels, &mandel_data);
+    if (initializeImage(&img, mandel_data.width, mandel_data.height) == -1)
+    {
+        printf("Error! Unable to initialize image. Exiting...\n");
+        if (output_file_specified)
+            free(mandel_data.output);
+        exit(-1);
+    }
 
-    FILE* pngout;
-    pngout = fopen(mandel_data.output, "wb");
+    printf("Generating Mandelbrot Set\n");
 
-    printf("Done!\nCleaning up...\n");
+    generateMandelbrotImage(&img, &mandel_data);
 
-    png_destroy_write_struct(&png_ptr, &info_ptr);
-    freeImage(img);
+    FILE* output_file;
+    output_file = fopen(mandel_data.output, "wb");
+
+    writeImageToFile(&img, output_file);
 
     if (appendMandelDataToFile(&mandel_data, log_path)) {
         printf("Added data to log file %s\n", log_path);
     }
 
+    printf("Done!\nCleaning up...\n");
+
+    freeImage(&img);
     if (output_file_specified)
         free(mandel_data.output);
 
-    fclose(pngout);
+    fclose(output_file);
 }

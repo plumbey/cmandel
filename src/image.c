@@ -16,29 +16,32 @@ int initializeImage(image *img, int width, int height)
             return -1;
     }
 
+    img->png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!img->png_ptr) 
+        return -1;
+    img->info_ptr = png_create_info_struct(img->png_ptr);
+    if (!img->info_ptr) 
+        return -1;
+
     return 0;
 }
 
-void freeImage(image img)
+void freeImage(image *img)
 {
-    for (int i = 0; i < img.height; i++) {
-        free(img.pixels[i]);
+    for (int i = 0; i < img->height; i++) {
+        free(img->pixels[i]);
     }
-    free(img.pixels);
+    free(img->pixels);
+    png_destroy_write_struct(&img->png_ptr, &img->info_ptr);
 }
 
-void writePngToFile(png_structp png_ptr, png_infop info_ptr, FILE* fp, png_bytepp img, int width, int height)
+void writeImageToFile(image *img, FILE* fp)
 {
-    png_init_io(png_ptr, fp);
-    png_write_info(png_ptr, info_ptr);
-    png_write_image(png_ptr, img);
-    png_write_end(png_ptr, info_ptr);
-}
-
-void destroyPng(png_structpp png_ptr_ptr, png_infopp info_ptr_ptr, image img)
-{
-    freeImage(img);
-    png_destroy_write_struct(png_ptr_ptr, info_ptr_ptr);
+    png_set_IHDR(img->png_ptr, img->info_ptr, img->width, img->height, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_init_io(img->png_ptr, fp);
+    png_write_info(img->png_ptr, img->info_ptr);
+    png_write_image(img->png_ptr, img->pixels);
+    png_write_end(img->png_ptr, img->info_ptr);
 }
 
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html

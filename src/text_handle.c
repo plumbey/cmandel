@@ -71,18 +71,6 @@ void printHelp()
 
 int parseArgs(int argc, char* argv[], MandelData* data)
 {
-    data->width = 3000;
-    data->height = 3000;
-    data->delta = 1.0;
-    data->xCenter = -0.5;
-    data->yCenter = 0;
-    data->iterMax = 1024;
-    data->huePower = 1.2;
-    data->darkness = 0;
-    data->colorIn = true;
-    data->hueOffset = 0;
-    data->output = "./output.png";
-
     int output_file_specified = 0;
 
     for (int i = 0; i < argc - 1; i++) {

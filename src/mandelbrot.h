@@ -1,7 +1,7 @@
 // mandelbrot.h
 #pragma once
 #include <stdbool.h>
-#include <png.h>
+#include "image.h"
 
 typedef struct {
     int width;
@@ -9,8 +9,7 @@ typedef struct {
     double delta;
     double xCenter;
     double yCenter;
-    // maximum Iterations, as these increase, the background tends to become
-    // darker
+    // maximum Iterations, as these increase, the background tends to become darker
     double iterMax;
     /* the power by which the hue is raised to, as this increases, the image
        becomes more rainbow */
@@ -26,5 +25,8 @@ typedef struct {
     char* output;
 } MandelData;
 
-double pointIteratePeriodic(double x0, double y0, int max, double delta);
-void generateMandelbrot(png_bytepp img, const MandelData* data);
+void generateMandelbrotImage(image* img, const MandelData* data);
+double pointIteratePeriodic(const double x0, const double y0, const int max, const double delta);
+hsv iterationsToHSV(const double iterations, const MandelData *data);
+void addPixelToImage(pixel p, image *img, int xval, int yval);
+MandelData createDefaultMandelData();
