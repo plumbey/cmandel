@@ -1,22 +1,28 @@
 OUT = cmandel
+CFLAGS = -fopenmp
 LDFLAGS = -lpng
 SRC_DIR := src
 BUILD_DIR := build
 SRCS := $(wildcard $(SRC_DIR)/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-
 ifeq ($(shell uname -s), Darwin)
-BREW_PREFIX := $(shell brew --prefix)
+LIBPNG_PREFIX := $(shell brew --prefix libpng)
 LIBOMP_PREFIX := $(shell brew --prefix libomp)
+LLVM_PREFIX := $(shell brew --prefix llvm)
 
-CFLAGS += -I$(BREW_PREFIX)/include
+CC = $(LLVM_PREFIX)/bin/clang
+
+CFLAGS += -I$(LLVM_PREFIX)/include
 CFLAGS += -I$(LIBOMP_PREFIX)/include
+CFLAGS += -I$(LIBPNG_PREFIX)/include
 CFLAGS += -Xpreprocessor -Wno-error=unused-command-line-argument
 
-LDFLAGS += -L$(BREW_PREFIX)/lib
+LDFLAGS += -L$(LLVM_PREFIX)/lib
+LDFLAGS += -L$(LIBPNG_PREFIX)/lib
 LDFLAGS += -L$(LIBOMP_PREFIX)/lib
-LDFLAGS += -lomp
+else
+CC = gcc
 endif
 
 all: all_compile
@@ -32,13 +38,13 @@ debug_compile: compile
 compile: build_dir $(OUT)
 
 $(OUT): $(OBJS)
-	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 build_dir:
 	@mkdir -p $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	gcc $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
 	./$(OUT)
