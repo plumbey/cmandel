@@ -8,11 +8,15 @@ OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 ifeq ($(shell uname -s), Darwin)
 BREW_PREFIX := $(shell brew --prefix)
+LIBOMP_PREFIX := $(shell brew --prefix libomp)
 
 CFLAGS += -I$(BREW_PREFIX)/include
+CFLAGS += -I$(LIBOMP_PREFIX)/include
 CFLAGS += -Xpreprocessor -Wno-error=unused-command-line-argument
 
 LDFLAGS += -L$(BREW_PREFIX)/lib
+LDFLAGS += -L$(LIBOMP_PREFIX)/lib
+LDFLAGS += -lomp
 endif
 
 all: all_compile

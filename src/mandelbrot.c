@@ -1,5 +1,6 @@
 // mandelbrot.c
 #include <math.h>
+#include <omp.h>
 #include "image.h"
 #include "mandelbrot.h"
 
@@ -18,6 +19,7 @@ void generateMandelbrotImage(image *img, const MandelData* data)
     const double x_step = x_difference / data->width;
     const double y_step = y_difference / data->height;
 
+#pragma omp parallel for
     for (int i = 0; i < data->height; i++) {
         double y0 = y_lower + i * y_step;
 
