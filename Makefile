@@ -49,6 +49,5 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 run: all
 	./$(OUT)
 
-
 clean:
 	rm -rf $(BUILD_DIR) $(OUT)

@@ -6,7 +6,10 @@ cMandel is a C program for generating and rendering mandelbrot sets.
 
 ## Dependencies
 
-Install `libpng` using your system package manager.
+This project uses
+Install `libpng` and `libomp` using your system package manager.
+
+MacOS versions of llvm don't support libomp, which is what this project uses for multithreading. To get around this, install `llvm` using brew. The Makefile will use this version of llvm, which supports libomp.
 
 ## Building
 
