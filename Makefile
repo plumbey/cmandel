@@ -1,6 +1,6 @@
 OUT = cmandel
 CFLAGS = -fopenmp
-LDFLAGS = -lpng
+LDFLAGS = -lpng -lm
 SRC_DIR := src
 BUILD_DIR := build
 SRCS := $(wildcard $(SRC_DIR)/*.c)
