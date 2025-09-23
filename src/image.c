@@ -120,11 +120,3 @@ pixel hsvToRgb(hsv hsvColor)
 
     return ret;
 }
-
-int lerp(int x, int y, float fraction) { return (x - y) * fraction + x; }
-
-hsv hsvLerpHue(hsv color1, hsv color2, float fraction)
-{
-    hsv ret = { lerp(color1.h, color2.h, fraction), color1.s, color1.v };
-    return ret;
-}

@@ -32,5 +32,3 @@ void freeImage(image *img);
 png_bytepp createBlankImage(png_structp png_ptr, int width, int height);
 hsv rgbToHsv(int rgbColor);
 pixel hsvToRgb(hsv hsvColor);
-int lerp(int x, int y, float fraction);
-hsv lerpHsvHue(hsv color1, hsv color2, float fraction);
