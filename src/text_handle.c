@@ -15,10 +15,10 @@ void printHelp()
     printf("INFO: all examples are the default values\n");
 
     printf("-w: image width specifier in pixels\n");
-    printf("Example: ./cmandel -w 3000\n\n");
+    printf("Example: ./cmandel -w 2000\n\n");
 
     printf("-h: image height specifier in pixels\n");
-    printf("Example: ./cmandel -h 3000\n\n");
+    printf("Example: ./cmandel -h 2000\n\n");
 
     printf("-d: coordinate delta specifier\n");
     printf("specifies the distance between coordinate center points and their "
@@ -70,7 +70,7 @@ void printHelp()
     printf("specifies as an integer how many threads will be allocated to "
            "cMandel. "
            "Set to 0 for all threads\n");
-    printf("Example: ./cmandel -t 0\n");
+    printf("Example: ./cmandel -t 0\n\n");
 
     printf("--help: help menu\n");
     printf("prints this menu\n\n");
